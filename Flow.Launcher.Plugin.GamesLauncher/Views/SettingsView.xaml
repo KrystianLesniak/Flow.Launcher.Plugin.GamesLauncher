@@ -1,0 +1,29 @@
+﻿<UserControl
+    x:Class="Flow.Launcher.Plugin.GamesLauncher.Views.SettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    Loaded="SettingsView_OnLoaded"
+    mc:Ignorable="d">
+    <Grid Margin="60,10,10,20" VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <CheckBox
+            x:Name="SynchronizeSteam"
+            Grid.Row="0"
+            Margin="10,10,5,5"
+            HorizontalAlignment="Left"
+            Content="Synchronize Steam" />
+        <CheckBox
+            x:Name="SyncrhonizeEpic"
+            Grid.Row="1"
+            Margin="10,5,5,5"
+            HorizontalAlignment="Left"
+            Content="Synchronize Epic Games Store" />
+    </Grid>
+</UserControl>
