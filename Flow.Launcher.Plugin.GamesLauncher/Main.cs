@@ -74,11 +74,11 @@ namespace Flow.Launcher.Plugin.GamesLauncher
         {
             var engines = new List<ISyncEngine>();
 
-            if (_settings.SynchronizeSteam)
-                engines.Add(new SteamSyncEngine(_context.API));
-
             if (_settings.SynchronizeEpicGamesStore)
                 engines.Add(new EpicSyncEngine(_context.API));
+
+            if (_settings.SynchronizeSteam)
+                engines.Add(new SteamSyncEngine(_context.API));
 
             return engines;
         }

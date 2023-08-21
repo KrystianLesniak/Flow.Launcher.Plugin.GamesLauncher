@@ -24,6 +24,6 @@
             Grid.Row="1"
             Margin="10,5,5,5"
             HorizontalAlignment="Left"
-            Content="Synchronize Epic Games Store" />
+            Content="Synchronize Epic Games Launcher" />
     </Grid>
 </UserControl>
