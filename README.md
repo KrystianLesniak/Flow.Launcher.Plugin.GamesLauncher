@@ -13,4 +13,4 @@ Games Launcher is a plugin for [Flow launcher](https://github.com/Flow-Launcher/
 ### Usage
 
     gl
-    gl <arguments>
+    gl <game-title>
