@@ -10,6 +10,9 @@ Games Launcher is a plugin for [Flow launcher](https://github.com/Flow-Launcher/
 * Epic Games Launcher
 * More coming soon...
 
+### Installation
+Todo
+
 ### Usage
 
     gl
