@@ -27,4 +27,5 @@ You can disable specific platforms via settings menu.
 
 ### Update library
 If you have (un)installed a game, you can update the plugin without restarting Flow Launcher by using the `Reload Plugin Data` command.
+
 ![Reload](docs/reload.png)
