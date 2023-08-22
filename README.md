@@ -12,7 +12,9 @@ Games Launcher is a plugin for [Flow launcher](https://github.com/Flow-Launcher/
 * More coming soon...
 
 ## Installation
-Todo once [manifest PR](https://github.com/Flow-Launcher/Flow.Launcher.PluginsManifest/pull/263) will be merged.
+In Flow Launcher, use the plugin store to find "GamesLauncher" or type:
+
+    pm install GamesLauncher
 
 ## Usage
 Just type `gl` command.
