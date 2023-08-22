@@ -1,14 +1,11 @@
 ﻿using Flow.Launcher.Plugin.GamesLauncher.Models;
-using GameFinder.RegistryUtils;
 using GameFinder.StoreHandlers.Xbox;
-using Microsoft.VisualBasic.ApplicationServices;
 using Microsoft.WindowsAPICodePack.Shell;
 using NexusMods.Paths;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Media;
 
 namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
 {
@@ -28,9 +25,9 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
 
         public async IAsyncEnumerable<Game> GetGames()
         {
-            var games = handler.FindAllGames().Where(x=>x.IsT0).Select(x=>x.AsT0);
+            var games = handler.FindAllGames().Where(x => x.IsT0).Select(x => x.AsT0);
 
-            if(!games.Any())
+            if (!games.Any())
                 yield break;
 
             IKnownFolder appsFolder = KnownFolderHelper.FromKnownFolderId(FODLERID_AppsFolder);
@@ -50,7 +47,7 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
                             return ValueTask.FromResult(true);
                         },
                         IconPath: null,
-                        IconDelegate: delegate()
+                        IconDelegate: delegate ()
                         {
                             return shellGame.Thumbnail.LargeBitmapSource;
                         }

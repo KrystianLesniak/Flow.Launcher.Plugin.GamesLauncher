@@ -73,7 +73,7 @@ namespace Flow.Launcher.Plugin.GamesLauncher
         {
             var engines = new List<ISyncEngine>();
 
-            if(_settings.SynchronizeXbox)
+            if (_settings.SynchronizeXbox)
                 engines.Add(new XboxSyncEngine(_context.API));
 
             if (_settings.SynchronizeEpicGamesStore)
