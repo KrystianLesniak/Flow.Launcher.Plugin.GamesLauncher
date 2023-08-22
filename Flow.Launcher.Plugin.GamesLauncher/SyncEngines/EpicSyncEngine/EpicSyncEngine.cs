@@ -39,7 +39,8 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine
                         return ValueTask.FromResult(true);
                     },
                     IconPath: PrepareIconPath(epicGame),
-                    Platform: PlatformName
+                    Platform: PlatformName,
+                    IconDelegate: null
                     );
             }
         }

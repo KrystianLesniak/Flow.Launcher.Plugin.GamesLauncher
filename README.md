@@ -8,6 +8,7 @@ Games Launcher is a plugin for [Flow launcher](https://github.com/Flow-Launcher/
 ### Supported platforms
 * Steam
 * Epic Games Launcher
+* Xbox
 * More coming soon...
 
 ### Installation

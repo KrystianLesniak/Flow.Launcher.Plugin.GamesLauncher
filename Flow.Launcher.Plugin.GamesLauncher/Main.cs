@@ -56,6 +56,7 @@ namespace Flow.Launcher.Plugin.GamesLauncher
                 Title = game.Title,
                 AsyncAction = game.RunTask,
                 IcoPath = game.IconPath,
+                Icon = game.IconDelegate,
                 SubTitle = game.Platform,
                 Score = string.IsNullOrWhiteSpace(search) ? 0 : _context.API.FuzzySearch(search, game.Title).Score
             };
@@ -71,6 +72,9 @@ namespace Flow.Launcher.Plugin.GamesLauncher
         private IEnumerable<ISyncEngine> InitializeEngines()
         {
             var engines = new List<ISyncEngine>();
+
+            if(_settings.SynchronizeXbox)
+                engines.Add(new XboxSyncEngine(_context.API));
 
             if (_settings.SynchronizeEpicGamesStore)
                 engines.Add(new EpicSyncEngine(_context.API));
@@ -96,10 +100,5 @@ namespace Flow.Launcher.Plugin.GamesLauncher
             return games;
         }
 
-        //Move all query related stuff to seperate class
-        private static string RemoveWhiteSpaces(string str)
-        {
-            return string.Concat(str.Where(c => !char.IsWhiteSpace(c)));
-        }
     }
 }

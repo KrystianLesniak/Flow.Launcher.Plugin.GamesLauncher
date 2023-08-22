@@ -17,6 +17,7 @@ namespace Flow.Launcher.Plugin.GamesLauncher.Views
         {
             SynchronizeSteam.IsChecked = _settings.SynchronizeSteam;
             SyncrhonizeEpic.IsChecked = _settings.SynchronizeEpicGamesStore;
+            SynchronizeXbox.IsChecked = _settings.SynchronizeXbox;
 
             SynchronizeSteam.Checked += (o, e) =>
             {
@@ -35,6 +36,16 @@ namespace Flow.Launcher.Plugin.GamesLauncher.Views
             {
                 _settings.SynchronizeEpicGamesStore = false;
             };
+
+            SynchronizeXbox.Checked += (o, e) =>
+            {
+                _settings.SynchronizeXbox = true;
+            };
+            SynchronizeXbox.Unchecked += (o, e) =>
+            {
+                _settings.SynchronizeXbox = false;
+            };
+
 
         }
     }
