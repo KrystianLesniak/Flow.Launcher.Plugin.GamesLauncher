@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Flow.Launcher.Plugin.GamesLauncher.Models;
+﻿using Flow.Launcher.Plugin.GamesLauncher.Models;
+using System.Collections.Generic;
 
 namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
 {

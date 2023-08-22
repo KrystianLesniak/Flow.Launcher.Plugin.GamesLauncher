@@ -37,7 +37,7 @@ namespace Flow.Launcher.Plugin.GamesLauncher
 
             var search = query.Search.Trim();
 
-            return Task.FromResult(gamesQuery.Select(x=> MapGameToResult(x, search)).ToList());
+            return Task.FromResult(gamesQuery.Select(x => MapGameToResult(x, search)).ToList());
         }
 
         public async Task ReloadDataAsync()

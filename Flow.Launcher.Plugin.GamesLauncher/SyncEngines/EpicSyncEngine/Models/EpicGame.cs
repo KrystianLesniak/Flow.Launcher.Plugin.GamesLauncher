@@ -35,6 +35,6 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine.Models
                 InstallLocation = installLocation?.GetValue<string>(),
                 LaunchExecutable = launchExecutable?.GetValue<string>(),
             };
-    }
+        }
     }
 }

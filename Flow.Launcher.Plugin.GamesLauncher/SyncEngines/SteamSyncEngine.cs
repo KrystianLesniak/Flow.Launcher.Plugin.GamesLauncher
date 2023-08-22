@@ -30,7 +30,7 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
             //TODO: Error handling
             var games = result.Where(x => x.IsGame()).Select(x => x.AsGame());
 
-            foreach(var game in games)
+            foreach (var game in games)
             {
                 yield return MapSteamGameToGame(game);
             }

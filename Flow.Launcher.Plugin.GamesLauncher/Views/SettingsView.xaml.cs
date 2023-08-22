@@ -1,6 +1,4 @@
-﻿using Flow.Launcher.Plugin.GamesLauncher;
-using System.Collections.Generic;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace Flow.Launcher.Plugin.GamesLauncher.Views
@@ -17,7 +15,7 @@ namespace Flow.Launcher.Plugin.GamesLauncher.Views
 
         private void SettingsView_OnLoaded(object sender, RoutedEventArgs re)
         {
-            SynchronizeSteam.IsChecked = _settings.SynchronizeSteam;    
+            SynchronizeSteam.IsChecked = _settings.SynchronizeSteam;
             SyncrhonizeEpic.IsChecked = _settings.SynchronizeEpicGamesStore;
 
             SynchronizeSteam.Checked += (o, e) =>
