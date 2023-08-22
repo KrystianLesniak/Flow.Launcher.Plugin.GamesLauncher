@@ -1,12 +1,12 @@
 ﻿using Flow.Launcher.Plugin.GamesLauncher.Models;
+using Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine.Models;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.Json.Nodes;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine.Models;
 
 namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine
 {
@@ -39,7 +39,8 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine
                         return ValueTask.FromResult(true);
                     },
                     IconPath: PrepareIconPath(epicGame),
-                    Platform: PlatformName
+                    Platform: PlatformName,
+                    IconDelegate: null
                     );
             }
         }
@@ -70,7 +71,7 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine
 
         private string PrepareIconPath(EpicGame epicGame)
         {
-            if(epicGame.InstallLocation != null && epicGame.LaunchExecutable != null)
+            if (epicGame.InstallLocation != null && epicGame.LaunchExecutable != null)
             {
                 var exePath = Path.Combine(epicGame.InstallLocation, epicGame.LaunchExecutable);
 
