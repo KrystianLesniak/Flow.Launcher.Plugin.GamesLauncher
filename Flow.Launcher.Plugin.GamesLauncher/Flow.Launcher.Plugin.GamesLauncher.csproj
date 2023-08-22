@@ -30,6 +30,8 @@
   <ItemGroup>
     <PackageReference Include="Flow.Launcher.Plugin" Version="4.1.1" />
     <PackageReference Include="GameFinder.StoreHandlers.Steam" Version="3.2.2" />
+    <PackageReference Include="GameFinder.StoreHandlers.Xbox" Version="3.2.2" />
+    <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
   </ItemGroup>
 
   <ItemGroup>

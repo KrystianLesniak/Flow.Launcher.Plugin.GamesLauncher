@@ -51,7 +51,8 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
                     return ValueTask.FromResult(true);
                 },
                 IconPath: GetIconPath(steamGame),
-                Platform: PlatformName
+                Platform: PlatformName,
+                IconDelegate: null
                 );
         }
 
