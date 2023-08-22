@@ -35,14 +35,11 @@ namespace Flow.Launcher.Plugin.GamesLauncher
         {
             var gamesQuery = _games;
 
-            if (!string.IsNullOrWhiteSpace(query.Search))
-            {
-                //TODO: Implement better search functionality
-                gamesQuery = _games.Where(x => RemoveWhiteSpaces(x.Title).IndexOf(RemoveWhiteSpaces(query.Search), StringComparison.CurrentCultureIgnoreCase) != -1);
-            }
+            var search = query.Search.Trim();
 
-            return Task.FromResult(gamesQuery.Select(MapGameToResult).ToList());
+            return Task.FromResult(gamesQuery.Select(x=> MapGameToResult(x, search)).ToList());
         }
+
         public async Task ReloadDataAsync()
         {
             await SynchronizeLibrary();
@@ -52,14 +49,15 @@ namespace Flow.Launcher.Plugin.GamesLauncher
         {
             return new SettingsView(_settings);
         }
-        private Result MapGameToResult(Game game)
+        private Result MapGameToResult(Game game, string search)
         {
             return new Result
             {
                 Title = game.Title,
                 AsyncAction = game.RunTask,
                 IcoPath = game.IconPath,
-                SubTitle = game.Platform
+                SubTitle = game.Platform,
+                Score = string.IsNullOrWhiteSpace(search) ? 0 : _context.API.FuzzySearch(search, game.Title).Score
             };
         }
 
