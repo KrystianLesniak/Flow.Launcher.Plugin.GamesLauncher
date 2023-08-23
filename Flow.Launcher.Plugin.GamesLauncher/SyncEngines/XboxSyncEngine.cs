@@ -1,4 +1,5 @@
-﻿using Flow.Launcher.Plugin.GamesLauncher.Models;
+﻿using Flow.Launcher.Plugin.GamesLauncher.Handlers;
+using Flow.Launcher.Plugin.GamesLauncher.Models;
 using GameFinder.StoreHandlers.Xbox;
 using Microsoft.WindowsAPICodePack.Shell;
 using NexusMods.Paths;
@@ -14,13 +15,13 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
         public string PlatformName => "Xbox";
 
         private readonly XboxHandler handler = new(FileSystem.Shared);
-
         private readonly Guid FODLERID_AppsFolder = new("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}");
-        private readonly IPublicAPI publicApi;
 
-        public XboxSyncEngine(IPublicAPI publicApi)
+        private readonly GameHandler gameHandler;
+
+        public XboxSyncEngine(GameHandler lastPlayedHandler)
         {
-            this.publicApi = publicApi;
+            this.gameHandler = lastPlayedHandler;
         }
 
         public async IAsyncEnumerable<Game> GetGames()
@@ -34,18 +35,17 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
 
             foreach (var game in games)
             {
-                var shellGame = appsFolder.FirstOrDefault(x => x.Name == game.DisplayName);
+                var gameTitle = game.DisplayName;
+
+                var shellGame = appsFolder.FirstOrDefault(x => x.Name == gameTitle);
                 if (shellGame != null)
                 {
-                    yield return new Game(
-                        Title: game.DisplayName,
-                        Platform: PlatformName,
-                        RunTask: (context) =>
-                        {
-                            publicApi.ShellRun($"shell:appsFolder\\{shellGame.ParsingName}", "explorer.exe");
+                    var cmd = $"shell:appsFolder\\{shellGame.ParsingName}";
 
-                            return ValueTask.FromResult(true);
-                        },
+                    yield return new Game(
+                        Title: gameTitle,
+                        Platform: PlatformName,
+                        RunTask: gameHandler.GetGameRunTaskByShell(PlatformName, gameTitle, cmd),
                         IconPath: null,
                         IconDelegate: delegate ()
                         {
