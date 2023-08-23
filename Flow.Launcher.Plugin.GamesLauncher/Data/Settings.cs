@@ -1,4 +1,4 @@
-﻿namespace Flow.Launcher.Plugin.GamesLauncher
+﻿namespace Flow.Launcher.Plugin.GamesLauncher.Data
 {
     public class Settings
     {

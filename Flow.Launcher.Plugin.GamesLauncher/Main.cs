@@ -1,3 +1,5 @@
+using Flow.Launcher.Plugin.GamesLauncher.Data;
+using Flow.Launcher.Plugin.GamesLauncher.Handlers;
 using Flow.Launcher.Plugin.GamesLauncher.Models;
 using Flow.Launcher.Plugin.GamesLauncher.SyncEngines;
 using Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine;
@@ -18,6 +20,7 @@ namespace Flow.Launcher.Plugin.GamesLauncher
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         private PluginInitContext _context;
         private Settings _settings;
+        private GameHandler _gameHandler;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
 
@@ -27,6 +30,7 @@ namespace Flow.Launcher.Plugin.GamesLauncher
         {
             _context = context;
             _settings = context.API.LoadSettingJsonStorage<Settings>();
+            _gameHandler = new GameHandler(context.API.LoadSettingJsonStorage<LastPlayedGames>(), context.API);
 
             await SynchronizeLibrary();
         }
@@ -51,15 +55,25 @@ namespace Flow.Launcher.Plugin.GamesLauncher
         }
         private Result MapGameToResult(Game game, string search)
         {
-            return new Result
+            var result = new Result
             {
                 Title = game.Title,
                 AsyncAction = game.RunTask,
                 IcoPath = game.IconPath,
                 Icon = game.IconDelegate,
                 SubTitle = game.Platform,
-                Score = string.IsNullOrWhiteSpace(search) ? 0 : _context.API.FuzzySearch(search, game.Title).Score
             };
+
+            if (string.IsNullOrWhiteSpace(search))   //When there is no search query display 10 last played games
+            {
+                result.Score = _gameHandler.GetGameResultScoreByOrder(game.Platform, game.Title);
+            }
+            else
+            {
+                result.Score = _context.API.FuzzySearch(search, game.Title).Score;
+            }
+
+            return result;
         }
 
         private async Task SynchronizeLibrary()
@@ -74,13 +88,13 @@ namespace Flow.Launcher.Plugin.GamesLauncher
             var engines = new List<ISyncEngine>();
 
             if (_settings.SynchronizeXbox)
-                engines.Add(new XboxSyncEngine(_context.API));
+                engines.Add(new XboxSyncEngine(_gameHandler));
 
             if (_settings.SynchronizeEpicGamesStore)
-                engines.Add(new EpicSyncEngine(_context.API));
+                engines.Add(new EpicSyncEngine(_gameHandler));
 
             if (_settings.SynchronizeSteam)
-                engines.Add(new SteamSyncEngine(_context.API));
+                engines.Add(new SteamSyncEngine(_gameHandler));
 
             return engines;
         }

@@ -1,9 +1,14 @@
-<img src="Flow.Launcher.Plugin.GamesLauncher/icon.png" width="32" height="32"> GamesLauncher - Flow Launcher Plugin
-==================
+<p align="center">
+    <img src="docs/logo.svg" height="40%" width="40%">
+</p>
+
+***
+
 GamesLauncher is a plugin for [Flow launcher](https://github.com/Flow-Launcher/Flow.Launcher) that simplifies the process of searching for and launching games from multiple libraries. It provides quick and convenient access to your favorite games across various platforms, including Steam, Epic Games, Xbox, and more libraries to come.
 
 ![Capture](docs/capture.gif)
 
+![Downloads](https://img.shields.io/github/downloads/KrystianLesniak/Flow.Launcher.Plugin.GamesLauncher/total)
 
 ### Supported platforms
 * Steam
@@ -19,13 +24,18 @@ In Flow Launcher, use the plugin store to find "GamesLauncher" or type:
 ## Usage
 Just type `gl` command.
 
+Get the last games started:
+    
     gl
+
+Search for a games:
+
     gl <game-title-to-seek>
 
 ### Settings
 You can disable specific platforms via settings menu.
 
-![Setting](docs/settings.png)
+<img src="docs/settings.png" height="40%" width="40%">
 
 ### Update library
 If you have (un)installed a game, you can update the plugin without restarting Flow Launcher by using the `Reload Plugin Data` command.
