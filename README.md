@@ -35,7 +35,7 @@ Search for a games:
 ### Settings
 You can disable specific platforms via settings menu.
 
-<img src="docs/settings.png" height="40%" width="40%">
+<img src="docs/settings.png" height="65%" width="65%">
 
 ### Update library
 If you have (un)installed a game, you can update the plugin without restarting Flow Launcher by using the `Reload Plugin Data` command.
