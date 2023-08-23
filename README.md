@@ -8,7 +8,7 @@ GamesLauncher is a plugin for [Flow launcher](https://github.com/Flow-Launcher/F
 
 ![Capture](docs/capture.gif)
 
-![Downloads](https://img.shields.io/github/downloads/KrystianLesniak/Flow.Launcher.Plugin.GamesLauncher/total)
+[![GitHub](https://img.shields.io/github/license/KrystianLesniak/Flow.Launcher.Plugin.GamesLauncher)](https://github.com/KrystianLesniak/Flow.Launcher.Plugin.GamesLauncher/blob/main/LICENSE) ![Downloads](https://img.shields.io/github/downloads/KrystianLesniak/Flow.Launcher.Plugin.GamesLauncher/total)
 
 ### Supported platforms
 * Steam
