@@ -24,7 +24,12 @@ In Flow Launcher, use the plugin store to find "GamesLauncher" or type:
 ## Usage
 Just type `gl` command.
 
+Get the last games started:
+    
     gl
+
+Search for a games:
+
     gl <game-title-to-seek>
 
 ### Settings
