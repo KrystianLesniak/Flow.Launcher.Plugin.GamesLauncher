@@ -1,9 +1,9 @@
-﻿using Flow.Launcher.Plugin.GamesLauncher.Models;
+﻿using Flow.Launcher.Plugin.GamesLauncher.Handlers;
+using Flow.Launcher.Plugin.GamesLauncher.Models;
 using GameFinder.Common;
 using GameFinder.RegistryUtils;
 using GameFinder.StoreHandlers.Steam;
 using NexusMods.Paths;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,11 +17,12 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
 
 
         private readonly SteamHandler handler = new(FileSystem.Shared, WindowsRegistry.Shared);
-        private readonly IPublicAPI publicApi;
         private const string steamLaunchUri = "steam://launch/";
-        public SteamSyncEngine(IPublicAPI publicApi)
+
+        private readonly GameHandler gameHandler;
+        public SteamSyncEngine(GameHandler gameHandler)
         {
-            this.publicApi = publicApi;
+            this.gameHandler = gameHandler;
         }
 
         public async IAsyncEnumerable<Game> GetGames()
@@ -40,16 +41,11 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
 
         private Game MapSteamGameToGame(SteamGame steamGame)
         {
+            var uriString = steamLaunchUri + steamGame.AppId.ToString().Trim();
+
             return new Game(
                 Title: steamGame.Name,
-                RunTask: (context) =>
-                {
-                    var uriString = steamLaunchUri + steamGame.AppId.ToString().Trim();
-
-                    publicApi.OpenAppUri(new Uri(uriString));
-
-                    return ValueTask.FromResult(true);
-                },
+                RunTask: gameHandler.GetGameRunTaskByUri(PlatformName, steamGame.Name, uriString),
                 IconPath: GetIconPath(steamGame),
                 Platform: PlatformName,
                 IconDelegate: null

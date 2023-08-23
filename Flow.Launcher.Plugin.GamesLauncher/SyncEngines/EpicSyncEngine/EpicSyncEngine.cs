@@ -1,4 +1,5 @@
-﻿using Flow.Launcher.Plugin.GamesLauncher.Models;
+﻿using Flow.Launcher.Plugin.GamesLauncher.Handlers;
+using Flow.Launcher.Plugin.GamesLauncher.Models;
 using Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine.Models;
 using Microsoft.Win32;
 using System;
@@ -14,12 +15,11 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine
     {
         public string PlatformName => "Epic Games Launcher";
 
+        private readonly GameHandler gameHandler;
 
-        private readonly IPublicAPI publicApi;
-
-        public EpicSyncEngine(IPublicAPI publicApi)
+        public EpicSyncEngine(GameHandler gameHandler)
         {
-            this.publicApi = publicApi;
+            this.gameHandler = gameHandler;
         }
 
         public async IAsyncEnumerable<Game> GetGames()
@@ -28,16 +28,11 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine
 
             foreach (var epicGame in epicGames)
             {
+                var uriLaunchString = PrepareLaunchUri(epicGame.CatalogNamespace, epicGame.CatalogItemId, epicGame.AppName);
+
                 yield return new Game(
                     Title: epicGame.DisplayName,
-                    RunTask: (context) =>
-                    {
-                        var uriString = PrepareLaunchUri(epicGame.CatalogNamespace, epicGame.CatalogItemId, epicGame.AppName);
-
-                        publicApi.OpenAppUri(new Uri(uriString));
-
-                        return ValueTask.FromResult(true);
-                    },
+                    RunTask: gameHandler.GetGameRunTaskByUri(PlatformName, epicGame.DisplayName, uriLaunchString),
                     IconPath: PrepareIconPath(epicGame),
                     Platform: PlatformName,
                     IconDelegate: null
@@ -69,7 +64,7 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine
             return epicGames;
         }
 
-        private string PrepareIconPath(EpicGame epicGame)
+        private static string PrepareIconPath(EpicGame epicGame)
         {
             if (epicGame.InstallLocation != null && epicGame.LaunchExecutable != null)
             {

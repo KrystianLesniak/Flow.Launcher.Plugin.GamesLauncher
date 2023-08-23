@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Flow.Launcher.Plugin.GamesLauncher.Data;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace Flow.Launcher.Plugin.GamesLauncher.Views
