@@ -70,7 +70,9 @@ namespace Flow.Launcher.Plugin.GamesLauncher
             }
             else
             {
-                result.Score = _context.API.FuzzySearch(search, game.Title).Score;
+                var fuzzySearch = _context.API.FuzzySearch(search, game.Title);
+                result.Score = fuzzySearch.Score;
+                result.TitleHighlightData = fuzzySearch.MatchData;
             }
 
             return result;
