@@ -1,14 +1,10 @@
-﻿using Flow.Launcher.Plugin.GamesLauncher.Handlers;
-using Flow.Launcher.Plugin.GamesLauncher.Models;
+﻿using Flow.Launcher.Plugin;
+using GameFinder.Common;
 using GameFinder.StoreHandlers.Xbox;
 using Microsoft.WindowsAPICodePack.Shell;
 using NexusMods.Paths;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
+namespace GamesLauncher.Platforms.SyncEngines
 {
     internal class XboxSyncEngine : ISyncEngine
     {
@@ -17,16 +13,16 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
         private readonly XboxHandler handler = new(FileSystem.Shared);
         private readonly Guid FODLERID_AppsFolder = new("{1e87508d-89c2-42f0-8a7e-645a0f50ca58}");
 
-        private readonly GameHandler gameHandler;
+        private readonly IPublicAPI publicApi;
 
-        public XboxSyncEngine(GameHandler lastPlayedHandler)
+        public XboxSyncEngine(IPublicAPI publicApi)
         {
-            this.gameHandler = lastPlayedHandler;
+            this.publicApi = publicApi;
         }
 
         public async IAsyncEnumerable<Game> GetGames()
         {
-            var games = handler.FindAllGames().Where(x => x.IsT0).Select(x => x.AsT0);
+            var games = handler.FindAllGames().Where(x => x.IsGame()).Select(x => x.AsGame());
 
             if (!games.Any())
                 yield break;
@@ -45,7 +41,7 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
                     yield return new Game(
                         Title: gameTitle,
                         Platform: PlatformName,
-                        RunTask: gameHandler.GetGameRunTaskByShell(PlatformName, gameTitle, cmd),
+                        RunTask: GetGameRunTask(cmd),
                         IconPath: null,
                         IconDelegate: delegate ()
                         {
@@ -56,6 +52,16 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
             }
 
             await Task.CompletedTask;
+        }
+
+        public Func<ActionContext, ValueTask<bool>> GetGameRunTask(string cmd)
+        {
+            return (context) =>
+            {
+                publicApi.ShellRun(cmd, "explorer.exe");
+
+                return ValueTask.FromResult(true);
+            };
         }
     }
 }

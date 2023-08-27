@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
-    <AssemblyName>Flow.Launcher.Plugin.GamesLauncher</AssemblyName>
-    <PackageId>Flow.Launcher.Plugin.GamesLauncher</PackageId>
     <Authors>KrystianLesniak</Authors>
     <PackageProjectUrl>https://github.com/KrystianLesniak/Flow.Launcher.Plugin.GamesLauncher</PackageProjectUrl>
     <RepositoryUrl>https://github.com/KrystianLesniak/Flow.Launcher.Plugin.GamesLauncher</RepositoryUrl>
@@ -29,19 +27,15 @@
 
   <ItemGroup>
     <PackageReference Include="Flow.Launcher.Plugin" Version="4.1.1" />
-    <PackageReference Include="GameFinder.StoreHandlers.Steam" Version="3.2.2" />
-    <PackageReference Include="GameFinder.StoreHandlers.Xbox" Version="3.2.2" />
-    <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GamesLauncher.Common\GamesLauncher.Common.csproj" />
+    <ProjectReference Include="..\GamesLauncher.Platforms\GamesLauncher.Platforms.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="icon.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Icons\epic.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Icons\steam.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

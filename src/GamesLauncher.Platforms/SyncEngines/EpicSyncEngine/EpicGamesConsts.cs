@@ -1,4 +1,4 @@
-﻿namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine
+﻿namespace GamesLauncher.Platforms.SyncEngines.EpicSyncEngine
 {
     internal static class EpicGamesConsts
     {

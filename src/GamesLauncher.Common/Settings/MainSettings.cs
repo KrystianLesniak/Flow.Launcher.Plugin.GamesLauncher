@@ -1,6 +1,6 @@
-﻿namespace Flow.Launcher.Plugin.GamesLauncher.Data
+﻿namespace GamesLauncher.Common.Settings
 {
-    public class Settings
+    public class MainSettings
     {
         public bool SynchronizeEpicGamesStore { get; set; } = true;
         public bool SynchronizeSteam { get; set; } = true;
