@@ -1,15 +1,10 @@
-﻿using Flow.Launcher.Plugin.GamesLauncher.Handlers;
-using Flow.Launcher.Plugin.GamesLauncher.Models;
+﻿using Flow.Launcher.Plugin;
 using GameFinder.Common;
 using GameFinder.RegistryUtils;
 using GameFinder.StoreHandlers.Steam;
 using NexusMods.Paths;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
+namespace GamesLauncher.Platforms.SyncEngines
 {
     internal class SteamSyncEngine : ISyncEngine
     {
@@ -17,12 +12,12 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
 
 
         private readonly SteamHandler handler = new(FileSystem.Shared, WindowsRegistry.Shared);
+        private readonly IPublicAPI publicApi;
         private const string steamLaunchUri = "steam://launch/";
 
-        private readonly GameHandler gameHandler;
-        public SteamSyncEngine(GameHandler gameHandler)
+        public SteamSyncEngine(IPublicAPI publicApi)
         {
-            this.gameHandler = gameHandler;
+            this.publicApi = publicApi;
         }
 
         public async IAsyncEnumerable<Game> GetGames()
@@ -41,15 +36,25 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines
 
         private Game MapSteamGameToGame(SteamGame steamGame)
         {
-            var uriString = steamLaunchUri + steamGame.AppId.ToString().Trim();
-
             return new Game(
                 Title: steamGame.Name,
-                RunTask: gameHandler.GetGameRunTaskByUri(PlatformName, steamGame.Name, uriString),
+                RunTask: GetGameRunTask(steamGame.AppId.ToString()),
                 IconPath: GetIconPath(steamGame),
                 Platform: PlatformName,
                 IconDelegate: null
                 );
+        }
+
+        private Func<ActionContext, ValueTask<bool>> GetGameRunTask(string gameAppIdString)
+        {
+            var uriString = steamLaunchUri + gameAppIdString;
+
+            return (context) =>
+            {
+                publicApi.OpenAppUri(new Uri(uriString));
+
+                return ValueTask.FromResult(true);
+            };
         }
 
         private static string GetIconPath(SteamGame game)

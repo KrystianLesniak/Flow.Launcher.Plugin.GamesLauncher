@@ -6,10 +6,10 @@ environment:
     DOTNET_CLI_TELEMETRY_OPTOUT: 1
 
 build_script:
-- ps: dotnet publish -c Release -r win-x64 --no-self-contained Flow.Launcher.Plugin.GamesLauncher/Flow.Launcher.Plugin.GamesLauncher.csproj
+- ps: dotnet publish -c Release -r win-x64 --no-self-contained src/GamesLauncher/GamesLauncher.csproj
 
 after_build:
-- ps: Compress-Archive -Path "Flow.Launcher.Plugin.GamesLauncher\bin\Release\win-x64\publish\*" -DestinationPath "Flow.Launcher.Plugin.GamesLauncher.zip"
+- ps: Compress-Archive -Path "src\GamesLauncher\bin\Release\win-x64\publish\*" -DestinationPath "GamesLauncher.zip"
 
 artifacts:
-    - path: 'Flow.Launcher.Plugin.GamesLauncher.zip'
+    - path: 'GamesLauncher.zip'
