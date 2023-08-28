@@ -1,14 +1,14 @@
-﻿using Flow.Launcher.Plugin.GamesLauncher.Data;
+﻿using GamesLauncher.Common.Settings;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Flow.Launcher.Plugin.GamesLauncher.Views
+namespace GamesLauncher.Views
 {
     public partial class SettingsView : UserControl
     {
-        private readonly Settings _settings;
+        private readonly MainSettings _settings;
 
-        public SettingsView(Settings settings)
+        public SettingsView(MainSettings settings)
         {
             InitializeComponent();
             _settings = settings;

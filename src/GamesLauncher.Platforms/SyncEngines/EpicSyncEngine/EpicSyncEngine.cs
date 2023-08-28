@@ -1,25 +1,20 @@
-﻿using Flow.Launcher.Plugin.GamesLauncher.Handlers;
-using Flow.Launcher.Plugin.GamesLauncher.Models;
-using Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine.Models;
+﻿using Flow.Launcher.Plugin;
+using GamesLauncher.Platforms.SyncEngines.EpicSyncEngine.Models;
 using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 
-namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine
+namespace GamesLauncher.Platforms.SyncEngines.EpicSyncEngine
 {
     internal class EpicSyncEngine : ISyncEngine
     {
+        private readonly IPublicAPI publicApi;
+
         public string PlatformName => "Epic Games Launcher";
 
-        private readonly GameHandler gameHandler;
-
-        public EpicSyncEngine(GameHandler gameHandler)
+        public EpicSyncEngine(IPublicAPI publicApi)
         {
-            this.gameHandler = gameHandler;
+            this.publicApi = publicApi;
         }
 
         public async IAsyncEnumerable<Game> GetGames()
@@ -28,11 +23,10 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine
 
             foreach (var epicGame in epicGames)
             {
-                var uriLaunchString = PrepareLaunchUri(epicGame.CatalogNamespace, epicGame.CatalogItemId, epicGame.AppName);
 
                 yield return new Game(
                     Title: epicGame.DisplayName,
-                    RunTask: gameHandler.GetGameRunTaskByUri(PlatformName, epicGame.DisplayName, uriLaunchString),
+                    RunTask: PrepareRunTask(epicGame.CatalogNamespace, epicGame.CatalogItemId, epicGame.AppName),
                     IconPath: PrepareIconPath(epicGame),
                     Platform: PlatformName,
                     IconDelegate: null
@@ -64,6 +58,18 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine
             return epicGames;
         }
 
+        private Func<ActionContext, ValueTask<bool>> PrepareRunTask(string catalogNamespace, string catalogItemId, string appName)
+        {
+            var launchUriString = $"com.epicgames.launcher://apps/{catalogNamespace}%3A{catalogItemId}%3A{appName}?action=launch&silent=true";
+
+            return (context) =>
+            {
+                publicApi.OpenAppUri(new Uri(launchUriString));
+
+                return ValueTask.FromResult(true);
+            };
+        }
+
         private static string PrepareIconPath(EpicGame epicGame)
         {
             if (epicGame.InstallLocation != null && epicGame.LaunchExecutable != null)
@@ -75,11 +81,6 @@ namespace Flow.Launcher.Plugin.GamesLauncher.SyncEngines.EpicSyncEngine
             }
 
             return Path.Combine("Icons", "epic.png");
-        }
-
-        private static string PrepareLaunchUri(string catalogNamespace, string catalogItemId, string appName)
-        {
-            return $"com.epicgames.launcher://apps/{catalogNamespace}%3A{catalogItemId}%3A{appName}?action=launch&silent=true";
         }
 
     }
