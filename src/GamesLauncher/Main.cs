@@ -61,7 +61,7 @@ namespace GamesLauncher
                 AsyncAction = game.RunTask,
                 IcoPath = game.IconPath,
                 Icon = game.IconDelegate,
-                SubTitle = game.Platform,
+                SubTitle = game.Platform
             };
 
             result.AsyncAction = (context) =>

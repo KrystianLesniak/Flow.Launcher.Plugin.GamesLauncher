@@ -1,10 +1,10 @@
 ﻿using Flow.Launcher.Plugin;
-using GamesLauncher.Platforms.SyncEngines.EpicSyncEngine.Models;
+using GamesLauncher.Platforms.SyncEngines.Epic.Models;
 using Microsoft.Win32;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace GamesLauncher.Platforms.SyncEngines.EpicSyncEngine
+namespace GamesLauncher.Platforms.SyncEngines.Epic
 {
     internal class EpicSyncEngine : ISyncEngine
     {
