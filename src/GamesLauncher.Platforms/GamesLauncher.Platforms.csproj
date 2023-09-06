@@ -17,12 +17,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GameFinder.StoreHandlers.Steam" Version="3.2.2" />
-    <PackageReference Include="GameFinder.StoreHandlers.Xbox" Version="3.2.2" />
+    <PackageReference Include="GameFinder.StoreHandlers.Steam" Version="4.0.0" />
+    <PackageReference Include="GameFinder.StoreHandlers.Xbox" Version="4.0.0" />
 	<PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
+	<PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.10" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Icons\amazon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Icons\epic.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

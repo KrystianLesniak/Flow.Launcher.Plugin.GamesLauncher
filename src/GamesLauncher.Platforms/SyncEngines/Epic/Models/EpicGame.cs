@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Nodes;
 
-namespace GamesLauncher.Platforms.SyncEngines.EpicSyncEngine.Models
+namespace GamesLauncher.Platforms.SyncEngines.Epic.Models
 {
     internal class EpicGame
     {

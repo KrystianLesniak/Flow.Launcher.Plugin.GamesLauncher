@@ -23,7 +23,6 @@ namespace GamesLauncher.Platforms.SyncEngines
         public async IAsyncEnumerable<Game> GetGames()
         {
             var result = handler.FindAllGames();
-            //TODO: Error handling
             var games = result.Where(x => x.IsGame()).Select(x => x.AsGame());
 
             foreach (var game in games)
