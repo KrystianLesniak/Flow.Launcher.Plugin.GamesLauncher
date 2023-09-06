@@ -42,7 +42,7 @@ namespace GamesLauncher.Platforms
             if (settings.SynchronizeSteam)
                 engines.Add(new SteamSyncEngine(publicApi));
 
-            if(settings.SynchronizeAmazon)
+            if (settings.SynchronizeAmazon)
                 engines.Add(new AmazonSyncEngine(publicApi));
 
             return engines;
