@@ -1,4 +1,4 @@
-﻿namespace GamesLauncher.Platforms.SyncEngines.EpicSyncEngine
+﻿namespace GamesLauncher.Platforms.SyncEngines.Epic
 {
     internal static class EpicGamesConsts
     {

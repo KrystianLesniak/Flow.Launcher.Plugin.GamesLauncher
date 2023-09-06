@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
-    <Authors>KrystianLesniak</Authors>
+	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	<Authors>KrystianLesniak</Authors>
     <PackageProjectUrl>https://github.com/KrystianLesniak/Flow.Launcher.Plugin.GamesLauncher</PackageProjectUrl>
     <RepositoryUrl>https://github.com/KrystianLesniak/Flow.Launcher.Plugin.GamesLauncher</RepositoryUrl>
     <PackageTags>flow-launcher flow-plugin</PackageTags>
@@ -12,6 +13,7 @@
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	<NoWarn>$(NoWarn);CS1591</NoWarn>
 	<Nullable>enable</Nullable>
+	<SelfContained>false</SelfContained>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

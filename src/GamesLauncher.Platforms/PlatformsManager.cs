@@ -1,7 +1,8 @@
 ﻿using Flow.Launcher.Plugin;
 using GamesLauncher.Common.Settings;
 using GamesLauncher.Platforms.SyncEngines;
-using GamesLauncher.Platforms.SyncEngines.EpicSyncEngine;
+using GamesLauncher.Platforms.SyncEngines.Amazon;
+using GamesLauncher.Platforms.SyncEngines.Epic;
 using System.Collections.Concurrent;
 
 namespace GamesLauncher.Platforms
@@ -40,6 +41,9 @@ namespace GamesLauncher.Platforms
 
             if (settings.SynchronizeSteam)
                 engines.Add(new SteamSyncEngine(publicApi));
+
+            if(settings.SynchronizeAmazon)
+                engines.Add(new AmazonSyncEngine(publicApi));
 
             return engines;
         }

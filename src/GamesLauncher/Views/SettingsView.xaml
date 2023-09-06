@@ -14,6 +14,7 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <TextBlock
             Grid.Row="0"
@@ -38,5 +39,11 @@
             Margin="10,5,5,5"
             HorizontalAlignment="Left"
             Content="Xbox" />
+        <CheckBox
+            x:Name="SynchronizeAmazon"
+            Grid.Row="4"
+            Margin="10,5,5,5"
+            HorizontalAlignment="Left"
+            Content="Amazon Games" />
     </Grid>
 </UserControl>
