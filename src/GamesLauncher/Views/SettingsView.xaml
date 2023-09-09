@@ -50,7 +50,12 @@
             Click="BtnOpenCustomShortcutsDirectory_Click"
             Grid.Row="5"
             Margin="10,5,5,5"
+            Padding="20,10,20,10"
             HorizontalAlignment="Left"
-            Content="Open Custom Shortcuts Directory" />
+            Content="Open Custom Shortcuts Directory">
+            <Button.ToolTip>
+                <TextBlock>Place shortcuts (.lnk/.url) in this directory. They will be available in the games list.</TextBlock>
+            </Button.ToolTip>
+        </Button>
     </Grid>
 </UserControl>
