@@ -17,6 +17,7 @@ GamesLauncher is a plugin for [Flow launcher](https://github.com/Flow-Launcher/F
 * Epic Games Launcher
 * Xbox
 * Amazon Games
+* [Custom Shortcuts](#custom-shortcuts)
 
 ## Installation
 In Flow Launcher, use the plugin store to find "GamesLauncher" or type:
@@ -38,6 +39,13 @@ Search for a games:
 You can disable specific platforms via settings menu.
 
 <img src="docs/settings.png" height="65%" width="65%">
+
+### Custom shortcuts
+If you have retail games (or on an unsupported platform) you can add your own shortcuts files (.lnk / .uri) to the plugin games list.
+
+To do this, go to Settings -> Plugins -> GamesLauncher -> Open Custom Shortcuts Directory
+
+Place your shortcut in the opened directory and... That's it! You can now `Reload Plugin Data` to update your library.
 
 ### Update library
 If you have (un)installed a game, you can update the plugin without restarting Flow Launcher by using the `Reload Plugin Data` command.

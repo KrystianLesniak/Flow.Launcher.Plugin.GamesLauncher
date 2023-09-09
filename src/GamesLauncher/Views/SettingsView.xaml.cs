@@ -1,4 +1,6 @@
-﻿using GamesLauncher.Common.Settings;
+﻿using Flow.Launcher.Plugin;
+using GamesLauncher.Common;
+using GamesLauncher.Common.Settings;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -7,11 +9,13 @@ namespace GamesLauncher.Views
     public partial class SettingsView : UserControl
     {
         private readonly MainSettings _settings;
+        private readonly IPublicAPI _publicAPI;
 
-        public SettingsView(MainSettings settings)
+        public SettingsView(MainSettings settings, IPublicAPI publicAPI)
         {
             InitializeComponent();
             _settings = settings;
+            _publicAPI = publicAPI;
         }
 
         private void SettingsView_OnLoaded(object sender, RoutedEventArgs re)
@@ -56,6 +60,11 @@ namespace GamesLauncher.Views
             {
                 _settings.SynchronizeAmazon = false;
             };
+        }
+
+        private void BtnOpenCustomShortcutsDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            _publicAPI.ShellRun(Paths.CustomShortcutsDirectory, "explorer.exe");
         }
     }
 }

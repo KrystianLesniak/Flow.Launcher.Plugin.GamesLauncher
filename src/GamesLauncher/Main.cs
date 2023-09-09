@@ -50,7 +50,7 @@ namespace GamesLauncher
 
         public Control CreateSettingPanel()
         {
-            return new SettingsView(_settings);
+            return new SettingsView(_settings, _publicApi);
         }
 
         private Result CreateResultFromGame(Game game, string search)
