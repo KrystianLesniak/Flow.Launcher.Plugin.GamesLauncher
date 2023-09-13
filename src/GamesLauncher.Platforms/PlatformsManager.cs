@@ -42,8 +42,10 @@ namespace GamesLauncher.Platforms
             if (settings.SynchronizeSteam)
                 engines.Add(new SteamSyncEngine(publicApi));
 
-            if(settings.SynchronizeAmazon)
+            if (settings.SynchronizeAmazon)
                 engines.Add(new AmazonSyncEngine(publicApi));
+
+            engines.Add(new ShortcutsSyncEngine(publicApi));
 
             return engines;
         }
