@@ -4,12 +4,11 @@ using GameFinder.RegistryUtils;
 using GameFinder.StoreHandlers.Steam;
 using NexusMods.Paths;
 
-namespace GamesLauncher.Platforms.SyncEngines
+namespace GamesLauncher.Platforms.SyncEngines.Steam
 {
     internal class SteamSyncEngine : ISyncEngine
     {
         public string PlatformName => "Steam";
-
 
         private readonly SteamHandler handler = new(FileSystem.Shared, WindowsRegistry.Shared);
         private readonly IPublicAPI publicApi;
@@ -22,7 +21,8 @@ namespace GamesLauncher.Platforms.SyncEngines
         public async IAsyncEnumerable<Game> GetGames()
         {
             var result = handler.FindAllGames();
-            var games = result.Where(x => x.IsGame()).Select(x => x.AsGame());
+            var games = result.Where(x => x.IsGame()).Select(x => x.AsGame())
+                .Where(x => SteamGamesConsts.AppIdsToIgnore.Contains(x.AppId.Value) == false);
 
             foreach (var game in games)
             {
