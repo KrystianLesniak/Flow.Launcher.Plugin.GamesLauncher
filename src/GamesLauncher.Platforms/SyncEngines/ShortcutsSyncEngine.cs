@@ -50,7 +50,7 @@ namespace GamesLauncher.Platforms.SyncEngines
         {
             if (fileInfo.Extension == ".lnk")
             {
-                return fileInfo.FullName; //TODO: Take ico location path directly from lnk like it's done for url below. Flow Launcher weridly handles lnk icons
+                return fileInfo.FullName;
             }
 
             if (fileInfo.Extension == ".url")
