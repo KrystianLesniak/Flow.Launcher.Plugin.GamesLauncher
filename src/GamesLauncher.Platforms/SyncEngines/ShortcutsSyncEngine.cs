@@ -48,11 +48,6 @@ namespace GamesLauncher.Platforms.SyncEngines
 
         private static async Task<string?> GetIconPath(FileInfo fileInfo)
         {
-            if (fileInfo.Extension == ".lnk")
-            {
-                return fileInfo.FullName;
-            }
-
             if (fileInfo.Extension == ".url")
             {
                 await foreach (var line in File.ReadLinesAsync(fileInfo.FullName))
@@ -64,7 +59,7 @@ namespace GamesLauncher.Platforms.SyncEngines
                 }
             }
 
-            return null;
+            return fileInfo.FullName;
         }
 
     }
