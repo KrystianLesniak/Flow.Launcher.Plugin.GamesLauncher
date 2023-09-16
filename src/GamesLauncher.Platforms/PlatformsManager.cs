@@ -3,6 +3,7 @@ using GamesLauncher.Common.Settings;
 using GamesLauncher.Platforms.SyncEngines;
 using GamesLauncher.Platforms.SyncEngines.Amazon;
 using GamesLauncher.Platforms.SyncEngines.Epic;
+using GamesLauncher.Platforms.SyncEngines.Steam;
 using System.Collections.Concurrent;
 
 namespace GamesLauncher.Platforms
