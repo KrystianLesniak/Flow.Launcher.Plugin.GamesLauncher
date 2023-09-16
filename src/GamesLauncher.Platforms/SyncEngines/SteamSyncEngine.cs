@@ -13,7 +13,6 @@ namespace GamesLauncher.Platforms.SyncEngines
 
         private readonly SteamHandler handler = new(FileSystem.Shared, WindowsRegistry.Shared);
         private readonly IPublicAPI publicApi;
-        private const string steamLaunchUri = "steam://launch/";
 
         public SteamSyncEngine(IPublicAPI publicApi)
         {
@@ -46,7 +45,7 @@ namespace GamesLauncher.Platforms.SyncEngines
 
         private Func<ActionContext, ValueTask<bool>> GetGameRunTask(string gameAppIdString)
         {
-            var uriString = steamLaunchUri + gameAppIdString;
+            var uriString = $"steam://launch/{gameAppIdString}/Dialog";
 
             return (context) =>
             {
