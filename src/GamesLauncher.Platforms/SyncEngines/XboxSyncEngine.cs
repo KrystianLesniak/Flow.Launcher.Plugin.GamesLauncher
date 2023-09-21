@@ -33,7 +33,8 @@ namespace GamesLauncher.Platforms.SyncEngines
             {
                 var gameTitle = game.DisplayName;
 
-                var shellGame = appsFolder.FirstOrDefault(x => x.Name == gameTitle);
+                var shellGame = appsFolder.FirstOrDefault(x => x.ParsingName.StartsWith(game.Id.Value));
+
                 if (shellGame != null)
                 {
                     var cmd = $"shell:appsFolder\\{shellGame.ParsingName}";
