@@ -1,7 +1,8 @@
 ﻿using Microsoft.Data.Sqlite;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System.Data;
-using System.Text.Json;
-using System.Text.Json.Nodes;
+using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
 namespace GamesLauncher.Platforms.SyncEngines.Amazon.Readers
 {
@@ -38,13 +39,21 @@ namespace GamesLauncher.Platforms.SyncEngines.Amazon.Readers
             await using var reader = await command.ExecuteReaderAsync();
             while (reader.Read())
             {
-                await using var json = reader.GetStream(0);
-                var jsonNode = (await JsonSerializer.DeserializeAsync<JsonNode>(json))?["ProductIconUrl"];
+                var json = reader.GetString(0);
 
-                if (jsonNode == null)
+                var jsonProductIconValue = JsonConvert.DeserializeObject<JObject>(json, new JsonSerializerSettings
+                {
+                    Error = delegate (object? sender, ErrorEventArgs args) // When malfunctioned JSON return null
+                    {
+                        args.ErrorContext.Handled = true;
+                    }
+                })
+                ?.Value<string?>("ProductIconUrl");
+
+                if (jsonProductIconValue == null)
                     continue;
 
-                return jsonNode.GetValue<string>();
+                return jsonProductIconValue;
             }
 
             return fallbackIcon;
