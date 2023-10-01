@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Nodes;
+﻿using Newtonsoft.Json.Linq;
 
 namespace GamesLauncher.Platforms.SyncEngines.Epic.Models
 {
@@ -11,29 +11,34 @@ namespace GamesLauncher.Platforms.SyncEngines.Epic.Models
         public required string? InstallLocation { get; set; }
         public required string? LaunchExecutable { get; set; }
 
-        internal static EpicGame? CreateFromJsonNode(JsonNode? node)
+        internal static EpicGame? CreateFromJObject(JObject? jObject)
         {
-            if (node == null)
+            if (jObject == null)
                 return null;
 
-            var displayName = node[nameof(DisplayName)];
-            var catalogNamespace = node[nameof(CatalogNamespace)];
-            var catalogItemId = node[nameof(CatalogItemId)];
-            var appName = node[nameof(AppName)];
-            var installLocation = node[nameof(InstallLocation)];
-            var launchExecutable = node[nameof(LaunchExecutable)];
+            var displayName = jObject.Value<string?>(nameof(DisplayName));
+            var catalogNamespace = jObject.Value<string?>(nameof(CatalogNamespace));
+            var catalogItemId = jObject.Value<string?>(nameof(CatalogItemId));
+            var appName = jObject.Value<string?>(nameof(AppName));
+            var installLocation = jObject.Value<string?>(nameof(InstallLocation));
+            var launchExecutable = jObject.Value<string?>(nameof(LaunchExecutable));
 
             if (displayName == null || catalogNamespace == null || catalogItemId == null || appName == null)
                 return null;
 
+            var isIncompleteInstall = jObject.Value<bool?>("bIsIncompleteInstall");
+
+            if (isIncompleteInstall == true)
+                return null;
+
             return new EpicGame
             {
-                DisplayName = displayName.GetValue<string>(),
-                CatalogNamespace = catalogNamespace.GetValue<string>(),
-                CatalogItemId = catalogItemId.GetValue<string>(),
-                AppName = appName.GetValue<string>(),
-                InstallLocation = installLocation?.GetValue<string>(),
-                LaunchExecutable = launchExecutable?.GetValue<string>(),
+                DisplayName = displayName,
+                CatalogNamespace = catalogNamespace,
+                CatalogItemId = catalogItemId,
+                AppName = appName,
+                InstallLocation = installLocation,
+                LaunchExecutable = launchExecutable,
             };
         }
     }

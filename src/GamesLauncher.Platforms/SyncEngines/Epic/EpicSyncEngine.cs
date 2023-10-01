@@ -1,8 +1,9 @@
 ﻿using Flow.Launcher.Plugin;
 using GamesLauncher.Platforms.SyncEngines.Epic.Models;
 using Microsoft.Win32;
-using System.Text.Json;
-using System.Text.Json.Nodes;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
 namespace GamesLauncher.Platforms.SyncEngines.Epic
 {
@@ -45,14 +46,21 @@ namespace GamesLauncher.Platforms.SyncEngines.Epic
 
             foreach (var metadataFile in Directory.EnumerateFiles(metadataDir, "*.item", SearchOption.AllDirectories))
             {
-                using FileStream jsonFileStream = File.OpenRead(metadataFile);
-                var jsonNode = await JsonSerializer.DeserializeAsync<JsonNode>(jsonFileStream);
+                var fileContent = await File.ReadAllTextAsync(metadataFile);
 
-                var game = EpicGame.CreateFromJsonNode(jsonNode);
+                var jObject = JsonConvert.DeserializeObject<JObject>(fileContent, new JsonSerializerSettings
+                {
+                    Error = delegate (object? sender, ErrorEventArgs args)
+                    {
+                        args.ErrorContext.Handled = true;
+                    }
+                });
+
+
+                var game = EpicGame.CreateFromJObject(jObject);
 
                 if (game != null)
                     epicGames.Add(game);
-
             }
 
             return epicGames;
