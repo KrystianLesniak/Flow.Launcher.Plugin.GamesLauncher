@@ -56,7 +56,6 @@ namespace GamesLauncher.Platforms.SyncEngines.Epic
                     }
                 });
 
-
                 var game = EpicGame.CreateFromJObject(jObject);
 
                 if (game != null)
