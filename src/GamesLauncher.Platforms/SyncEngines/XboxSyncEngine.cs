@@ -31,8 +31,6 @@ namespace GamesLauncher.Platforms.SyncEngines
 
             foreach (var game in games)
             {
-                var gameTitle = game.DisplayName;
-
                 var shellGame = appsFolder.FirstOrDefault(x => x.ParsingName.StartsWith(game.Id.Value));
 
                 if (shellGame != null)
@@ -40,7 +38,7 @@ namespace GamesLauncher.Platforms.SyncEngines
                     var cmd = $"shell:appsFolder\\{shellGame.ParsingName}";
 
                     yield return new Game(
-                        Title: gameTitle,
+                        Title: shellGame.Name,
                         Platform: PlatformName,
                         RunTask: GetGameRunTask(cmd),
                         IconPath: null,
