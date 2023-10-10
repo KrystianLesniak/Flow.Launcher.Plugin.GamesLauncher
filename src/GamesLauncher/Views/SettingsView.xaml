@@ -7,9 +7,11 @@
     d:DesignHeight="300"
     d:DesignWidth="300"
     Loaded="SettingsView_OnLoaded"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
     mc:Ignorable="d">
     <Grid Margin="60,10,10,20" VerticalAlignment="Top">
         <Grid.RowDefinitions>
+            <RowDefinition />
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
@@ -57,5 +59,25 @@
                 <TextBlock>Place shortcuts (.lnk/.url) in this directory. They will be available in the games list.</TextBlock>
             </Button.ToolTip>
         </Button>
+        <StackPanel 
+            Name="HidenGamesList"
+            Visibility="Visible"
+            Grid.Row="6">
+            <ListView
+                    Name="HidenGames"
+                    Height="auto"
+                    Margin="10"
+                    BorderBrush="DarkGray"
+                    BorderThickness="1"
+                    ItemsSource="{Binding _hidenGames.Items}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Title, Mode=OneWay}" Header="Title" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Platform, Mode=OneWay}" Header="Platform" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
     </Grid>
+    <!--<StackPanel Name="HidenGamesList" Visibility="Collapsed">-->
 </UserControl>

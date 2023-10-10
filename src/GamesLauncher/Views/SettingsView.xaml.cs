@@ -9,12 +9,14 @@ namespace GamesLauncher.Views
     public partial class SettingsView : UserControl
     {
         private readonly MainSettings _settings;
+        private readonly HidenGames _hidenGames;
         private readonly IPublicAPI _publicAPI;
 
-        public SettingsView(MainSettings settings, IPublicAPI publicAPI)
+        public SettingsView(MainSettings settings, HidenGames hidenGames, IPublicAPI publicAPI)
         {
             InitializeComponent();
             _settings = settings;
+            _hidenGames = hidenGames;
             _publicAPI = publicAPI;
         }
 
