@@ -50,12 +50,11 @@ namespace GamesLauncher.Platforms.SyncEngines.Epic
 
                 var jObject = JsonConvert.DeserializeObject<JObject>(fileContent, new JsonSerializerSettings
                 {
-                    Error = delegate (object? sender, ErrorEventArgs args)
+                    Error = delegate (object? sender, ErrorEventArgs args)  // When malfunctioned JSON return null
                     {
                         args.ErrorContext.Handled = true;
                     }
                 });
-
 
                 var game = EpicGame.CreateFromJObject(jObject);
 
