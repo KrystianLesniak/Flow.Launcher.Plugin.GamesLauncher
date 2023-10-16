@@ -24,7 +24,7 @@
         {
             var index = OrderedGames.LastIndexOf(internalGameId);
 
-            return (++index) * 100;
+            return (++index) * 1000;
         }
 
     }
