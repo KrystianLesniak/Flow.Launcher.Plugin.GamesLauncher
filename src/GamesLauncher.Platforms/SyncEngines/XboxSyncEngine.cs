@@ -3,6 +3,7 @@ using GameFinder.Common;
 using GameFinder.StoreHandlers.Xbox;
 using Microsoft.WindowsAPICodePack.Shell;
 using NexusMods.Paths;
+using static Flow.Launcher.Plugin.Result;
 
 namespace GamesLauncher.Platforms.SyncEngines
 {
@@ -37,15 +38,14 @@ namespace GamesLauncher.Platforms.SyncEngines
                 {
                     var cmd = $"shell:appsFolder\\{shellGame.ParsingName}";
 
+                    var iconDelegate = GetIconDelegate(shellGame);
+
                     yield return new Game(
                         Title: shellGame.Name,
                         Platform: PlatformName,
                         RunTask: GetGameRunTask(cmd),
-                        IconPath: null,
-                        IconDelegate: delegate ()
-                        {
-                            return shellGame.Thumbnail.LargeBitmapSource;
-                        }
+                        IconPath: iconDelegate is null ? Path.Combine("Icons", "xbox.png") : null,
+                        IconDelegate: iconDelegate
                         );
                 }
             }
@@ -53,13 +53,28 @@ namespace GamesLauncher.Platforms.SyncEngines
             await Task.CompletedTask;
         }
 
-        public Func<ActionContext, ValueTask<bool>> GetGameRunTask(string cmd)
+        private Func<ActionContext, ValueTask<bool>> GetGameRunTask(string cmd)
         {
             return (context) =>
             {
                 publicApi.ShellRun(cmd, "explorer.exe");
 
                 return ValueTask.FromResult(true);
+            };
+        }
+
+        private static IconDelegate? GetIconDelegate(ShellObject shellGame)
+        {
+            var bitmapSource = shellGame.Thumbnail.LargeBitmapSource;
+
+            if (bitmapSource == null || bitmapSource.CanFreeze == false)
+                return null;
+
+            bitmapSource.Freeze();
+
+            return delegate ()
+            {
+                return bitmapSource;
             };
         }
     }
