@@ -70,7 +70,7 @@ namespace GamesLauncher.Platforms.SyncEngines
             if (bitmapSource == null || bitmapSource.CanFreeze == false)
                 return null;
 
-            bitmapSource.Freeze();
+            bitmapSource.Freeze(); //This is needed. Otherwise FL throws exception for some users.
 
             return delegate ()
             {
