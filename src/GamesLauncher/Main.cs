@@ -16,7 +16,7 @@ namespace GamesLauncher
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         private MainSettings _settings;
         private LastPlayedGames _lastPlayedGames;
-        private HidenGames _hidenGames;
+        private HiddenGames _hiddenGames;
 
         private IPublicAPI _publicApi;
         private PlatformsManager _platformsManager;
@@ -29,7 +29,7 @@ namespace GamesLauncher
             _publicApi = context.API;
             _settings = _publicApi.LoadSettingJsonStorage<MainSettings>();
             _lastPlayedGames = _publicApi.LoadSettingJsonStorage<LastPlayedGames>();
-            _hidenGames = _publicApi.LoadSettingJsonStorage<HidenGames>();
+            _hiddenGames = _publicApi.LoadSettingJsonStorage<HiddenGames>();
 
             _platformsManager = new PlatformsManager(context.API);
 
@@ -70,7 +70,7 @@ namespace GamesLauncher
                 Glyph = new GlyphInfo(FontFamily: "/Resources/#Segoe Fluent Icons", Glyph: "\ued1a"),
                 AsyncAction = (context) =>
                 {
-                    _hidenGames.Hide(game.Title, game.Platform, game.InternalGameId);
+                    _hiddenGames.Hide(game.Title, game.Platform, game.InternalGameId);
                     return ValueTask.FromResult(false);
                 }
             });
@@ -80,12 +80,12 @@ namespace GamesLauncher
 
         public Control CreateSettingPanel()
         {
-            return new SettingsView(_settings, _hidenGames, _publicApi);
+            return new SettingsView(_settings, _hiddenGames, _publicApi);
         }
 
         private Result? CreateQueryResultFromGame(Game game, string search)
         {
-            if (_hidenGames.IsHiden(game.InternalGameId))
+            if (_hiddenGames.IsHidden(game.InternalGameId))
                 return null;
 
             var result = new Result

@@ -11,18 +11,18 @@ namespace GamesLauncher.Views
     public partial class SettingsView : UserControl
     {
         private readonly MainSettings _settings;
-        private readonly HidenGames _hidenGames;
+        private readonly HiddenGames _hiddenGames;
 
         private readonly IPublicAPI _publicAPI;
 
-        public SettingsView(MainSettings settings, HidenGames hidenGames, IPublicAPI publicAPI)
+        public SettingsView(MainSettings settings, HiddenGames hiddenGames, IPublicAPI publicAPI)
         {
             InitializeComponent();
             _settings = settings;
-            _hidenGames = hidenGames;
+            _hiddenGames = hiddenGames;
             _publicAPI = publicAPI;
 
-            HidenGames.ItemsSource = new ObservableCollection<HidenGame>(_hidenGames.Items);
+            HiddenGames.ItemsSource = new ObservableCollection<HiddenGame>(_hiddenGames.Items);
         }
 
         private void SettingsView_OnLoaded(object sender, RoutedEventArgs re)
@@ -76,16 +76,16 @@ namespace GamesLauncher.Views
 
         private void BtnShowHiddenGames_Click(object sender, RoutedEventArgs e)
         {
-            HidenGamesStackPanel.Visibility = HidenGamesStackPanel.Visibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
+            HiddenGamesStackPanel.Visibility = HiddenGamesStackPanel.Visibility == Visibility.Collapsed ? Visibility.Visible : Visibility.Collapsed;
         }
 
         private void BtnUnhideGame_Click(object sender, EventArgs e)
         {
-            if ((sender as Button)?.CommandParameter is not HidenGame gameToUnhide)
+            if ((sender as Button)?.CommandParameter is not HiddenGame gameToUnhide)
                 return;
 
-            _hidenGames.Unhide(gameToUnhide.InternalGameId);
-            HidenGames.ItemsSource = new ObservableCollection<HidenGame>(_hidenGames.Items);
+            _hiddenGames.Unhide(gameToUnhide.InternalGameId);
+            HiddenGames.ItemsSource = new ObservableCollection<HiddenGame>(_hiddenGames.Items);
         }
     }
 }

@@ -1,14 +1,22 @@
 ﻿namespace GamesLauncher.Common.Settings
 {
-    public class HidenGames
+    public class HiddenGames
     {
-        public List<HidenGame> Items { get; set; } = new List<HidenGame>(); //This property and class needs to be public to be retrieved by FL Settings
+        public List<HiddenGame> Items { get; set; } = new List<HiddenGame>() //This property and class needs to be public to be retrieved by FL Settings
+        {
+            new HiddenGame
+            {
+                InternalGameId = "Steam_Steamworks Common Redistributables",
+                Platform = "Steam",
+                Title = "Steamworks Common Redistributables"
+            }
+        }; 
 
         public void Hide(string title, string platform, string internalGameId)
         {
             if (!Items.Any(x => x.InternalGameId == internalGameId))
             {
-                Items.Add(new HidenGame
+                Items.Add(new HiddenGame
                 {
                     InternalGameId = internalGameId,
                     Platform = platform,
@@ -25,13 +33,13 @@
             }
         }
 
-        public bool IsHiden(string internalGameId)
+        public bool IsHidden(string internalGameId)
         {
             return Items.Any(x => x.InternalGameId == internalGameId);
         }
     }
 
-    public class HidenGame
+    public class HiddenGame
     {
         public string Title { get; set; } = string.Empty;
         public string Platform { get; set; } = string.Empty;

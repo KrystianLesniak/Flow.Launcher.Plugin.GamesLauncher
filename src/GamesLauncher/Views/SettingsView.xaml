@@ -69,16 +69,16 @@
             Content="Hidden Games">
         </Button>
         <StackPanel 
-            Name="HidenGamesStackPanel"
+            Name="HiddenGamesStackPanel"
             Visibility="Collapsed"
             Grid.Row="7">
             <ListView
-                    Name="HidenGames"
+                    Name="HiddenGames"
                     Height="auto"
                     Margin="10"
                     BorderBrush="DarkGray"
                     BorderThickness="1"
-                    ItemsSource="{Binding _hidenGames.Items}" VerticalAlignment="Center">
+                    ItemsSource="{Binding _hiddenGames.Items}" VerticalAlignment="Center">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Title">
