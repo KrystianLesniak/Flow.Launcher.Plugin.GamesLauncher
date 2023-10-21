@@ -84,7 +84,7 @@ namespace GamesLauncher.Views
             if ((sender as Button)?.CommandParameter is not HiddenGame gameToUnhide)
                 return;
 
-            _hiddenGames.Unhide(gameToUnhide.InternalGameId);
+            _hiddenGames.Unhide(gameToUnhide);
             HiddenGames.ItemsSource = new ObservableCollection<HiddenGame>(_hiddenGames.Items);
         }
     }

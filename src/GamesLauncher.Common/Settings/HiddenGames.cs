@@ -25,12 +25,9 @@
             }
         }
 
-        public void Unhide(string internalGameId)
+        public void Unhide(HiddenGame hiddenGame)
         {
-            if (Items.Any(x => x.InternalGameId == internalGameId))
-            {
-                Items.Remove(Items.First(x => x.InternalGameId == internalGameId));
-            }
+            Items.Remove(hiddenGame);
         }
 
         public bool IsHidden(string internalGameId)
