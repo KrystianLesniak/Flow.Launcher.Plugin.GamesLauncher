@@ -45,6 +45,13 @@
     <None Update="icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Images\excludeindexpath.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Images\" />
   </ItemGroup>
 
 </Project>
