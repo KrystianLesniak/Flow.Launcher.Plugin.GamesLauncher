@@ -18,6 +18,7 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <TextBlock
             Grid.Row="0"
@@ -59,25 +60,59 @@
                 <TextBlock>Place shortcuts (.lnk/.url) in this directory. They will be available in the games list.</TextBlock>
             </Button.ToolTip>
         </Button>
+        <Button
+            Click="BtnShowHiddenGames_Click"
+            Grid.Row="6"
+            Margin="10,5,5,5"
+            Padding="20,10,20,10"
+            HorizontalAlignment="Left"
+            Content="Hidden Games">
+        </Button>
         <StackPanel 
-            Name="HidenGamesList"
-            Visibility="Visible"
-            Grid.Row="6">
+            Name="HidenGamesStackPanel"
+            Visibility="Collapsed"
+            Grid.Row="7">
             <ListView
                     Name="HidenGames"
                     Height="auto"
                     Margin="10"
                     BorderBrush="DarkGray"
                     BorderThickness="1"
-                    ItemsSource="{Binding _hidenGames.Items}">
+                    ItemsSource="{Binding _hidenGames.Items}" VerticalAlignment="Center">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Title, Mode=OneWay}" Header="Title" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Platform, Mode=OneWay}" Header="Platform" />
+                        <GridViewColumn Header="Title">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Margin="0 10 0 0" Text="{Binding Title}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Platform" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Margin="0 10 0 0" Text="{Binding Platform}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        Click="BtnUnhideGame_Click"
+                                        CommandParameter="{Binding .}"
+                                        Margin="5,5,5,5"
+                                        Content="Unhide" VerticalAlignment="Center">
+                                        <Button.ToolTip>
+                                            <TextBlock>Unhide this item from plugin list</TextBlock>
+                                        </Button.ToolTip>
+                                    </Button>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>
         </StackPanel>
     </Grid>
-    <!--<StackPanel Name="HidenGamesList" Visibility="Collapsed">-->
 </UserControl>

@@ -21,8 +21,7 @@ namespace GamesLauncher.Platforms.SyncEngines.Steam
         public async IAsyncEnumerable<Game> GetGames()
         {
             var result = handler.FindAllGames();
-            var games = result.Where(x => x.IsGame()).Select(x => x.AsGame())
-                .Where(x => SteamGamesConsts.AppIdsToIgnore.Contains(x.AppId.Value) == false);
+            var games = result.Where(x => x.IsGame()).Select(x => x.AsGame());
 
             foreach (var game in games)
             {
