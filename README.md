@@ -43,7 +43,7 @@ You can disable specific platforms via settings menu.
 ### Custom shortcuts
 If you have retail games (or on an unsupported platform) you can add your own shortcuts files (.lnk / .uri) to the plugin games list.
 
-To do this, go to Settings -> Plugins -> GamesLauncher -> Open Custom Shortcuts Directory
+To do this, go to `Settings -> Plugins -> GamesLauncher -> Open Custom Shortcuts Directory`
 
 Place your shortcut in the opened directory and... That's it! You can now `Reload Plugin Data` to update your library.
 
@@ -51,3 +51,10 @@ Place your shortcut in the opened directory and... That's it! You can now `Reloa
 If you have (un)installed a game, you can update the plugin without restarting Flow Launcher by using the `Reload Plugin Data` command.
 
 ![Reload](docs/reload.png)
+
+### Hide an item
+You can hide a specific game from the plugin list by accessing the context menu (`right arrow`) and using the `Hide` command.
+
+![Hide Game](docs/hide.png)
+
+The game can be unhidden later from the settings menu.

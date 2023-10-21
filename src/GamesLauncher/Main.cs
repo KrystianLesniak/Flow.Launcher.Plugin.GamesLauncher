@@ -11,13 +11,14 @@ using System.Windows.Controls;
 
 namespace GamesLauncher
 {
-    public class Main : IAsyncPlugin, ISettingProvider, IAsyncReloadable
+    public class Main : IAsyncPlugin, ISettingProvider, IAsyncReloadable, IContextMenu
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        private IPublicAPI _publicApi;
         private MainSettings _settings;
         private LastPlayedGames _lastPlayedGames;
+        private HiddenGames _hiddenGames;
 
+        private IPublicAPI _publicApi;
         private PlatformsManager _platformsManager;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
@@ -28,6 +29,7 @@ namespace GamesLauncher
             _publicApi = context.API;
             _settings = _publicApi.LoadSettingJsonStorage<MainSettings>();
             _lastPlayedGames = _publicApi.LoadSettingJsonStorage<LastPlayedGames>();
+            _hiddenGames = _publicApi.LoadSettingJsonStorage<HiddenGames>();
 
             _platformsManager = new PlatformsManager(context.API);
 
@@ -45,16 +47,47 @@ namespace GamesLauncher
 
             var search = query.Search.Trim();
 
-            return Task.FromResult(gamesQuery.Select(x => CreateResultFromGame(x, search)).ToList());
+            return Task.FromResult(
+                gamesQuery.Select(x => 
+                CreateQueryResultFromGame(x, search))
+                .Where(x => x != null).Select(x => x!).ToList());
+        }
+
+        public List<Result> LoadContextMenus(Result selectedResult)
+        {
+            var results = new List<Result>();
+
+            var game = _platformsManager.GetGame(selectedResult.Title, selectedResult.SubTitle);
+
+            if (game is null)
+                return results;
+
+            results.Add(new Result
+            {
+                Title = "Hide",
+                SubTitle = "The game can be unhidden in settings panel",
+                IcoPath = @"Images\excludeindexpath.png",
+                Glyph = new GlyphInfo(FontFamily: "/Resources/#Segoe Fluent Icons", Glyph: "\ued1a"),
+                AsyncAction = (context) =>
+                {
+                    _hiddenGames.Hide(game.Title, game.Platform, game.InternalGameId);
+                    return ValueTask.FromResult(false);
+                }
+            });
+
+            return results;
         }
 
         public Control CreateSettingPanel()
         {
-            return new SettingsView(_settings, _publicApi);
+            return new SettingsView(_settings, _hiddenGames, _publicApi);
         }
 
-        private Result CreateResultFromGame(Game game, string search)
+        private Result? CreateQueryResultFromGame(Game game, string search)
         {
+            if (_hiddenGames.IsHidden(game.InternalGameId))
+                return null;
+
             var result = new Result
             {
                 Title = game.Title,
@@ -84,6 +117,5 @@ namespace GamesLauncher
 
             return result;
         }
-
     }
 }
