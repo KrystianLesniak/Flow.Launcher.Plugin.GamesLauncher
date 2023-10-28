@@ -43,12 +43,12 @@ namespace GamesLauncher
 
         public Task<List<Result>> QueryAsync(Query query, CancellationToken token)
         {
-            var gamesQuery = _platformsManager.GetSynchronizedGames();
+            var games = _platformsManager.AllSynchronizedGames;
 
             var search = query.Search.Trim();
 
             return Task.FromResult(
-                gamesQuery.Select(x => 
+                games.Select(x =>
                 CreateQueryResultFromGame(x, search))
                 .Where(x => x != null).Select(x => x!).ToList());
         }
@@ -74,6 +74,21 @@ namespace GamesLauncher
                     return ValueTask.FromResult(false);
                 }
             });
+
+            if (game.UninstallAction is not null)
+            {
+                results.Add(new Result
+                {
+                    Title = game.UninstallAction.Title,
+                    IcoPath = @"Images\deletefilefolder.png",
+                    Glyph = new GlyphInfo(FontFamily: "/Resources/#Segoe Fluent Icons", Glyph: "\ue74d"),
+                    AsyncAction = (context) =>
+                    {
+                        _ = game.UninstallAction.UninstallTask.Invoke();
+                        return ValueTask.FromResult(true);
+                    }
+                });
+            }
 
             return results;
         }

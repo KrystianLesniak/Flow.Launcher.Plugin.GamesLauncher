@@ -9,6 +9,8 @@ namespace GamesLauncher.Platforms.SyncEngines.Steam
     internal class SteamSyncEngine : ISyncEngine
     {
         public string PlatformName => "Steam";
+        public IEnumerable<Game> SynchronizedGames { get; private set; } = Array.Empty<Game>();
+
 
         private readonly SteamHandler handler = new(FileSystem.Shared, WindowsRegistry.Shared);
         private readonly IPublicAPI publicApi;
@@ -18,27 +20,29 @@ namespace GamesLauncher.Platforms.SyncEngines.Steam
             this.publicApi = publicApi;
         }
 
-        public async IAsyncEnumerable<Game> GetGames()
+        public async Task SynchronizeGames()
         {
             var result = handler.FindAllGames();
             var games = result.Where(x => x.IsGame()).Select(x => x.AsGame());
+            var syncedGames = new List<Game>();
 
             foreach (var game in games)
             {
-                yield return MapSteamGameToGame(game);
+                syncedGames.Add(MapSteamGameToGame(game));
             }
 
+            SynchronizedGames = syncedGames;
             await Task.CompletedTask;
         }
 
         private Game MapSteamGameToGame(SteamGame steamGame)
         {
             return new Game(
-                Title: steamGame.Name,
-                RunTask: GetGameRunTask(steamGame.AppId.ToString()),
-                IconPath: GetIconPath(steamGame),
-                Platform: PlatformName,
-                IconDelegate: null
+                title: steamGame.Name,
+                runTask: GetGameRunTask(steamGame.AppId.ToString()),
+                iconPath: GetIconPath(steamGame),
+                platform: PlatformName,
+                iconDelegate: null
                 );
         }
 

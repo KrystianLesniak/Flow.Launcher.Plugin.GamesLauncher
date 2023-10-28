@@ -45,6 +45,9 @@
     <None Update="icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Images\deletefilefolder.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Images\excludeindexpath.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
