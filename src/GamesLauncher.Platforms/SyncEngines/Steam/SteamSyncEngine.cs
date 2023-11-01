@@ -42,7 +42,8 @@ namespace GamesLauncher.Platforms.SyncEngines.Steam
                 runTask: GetGameRunTask(steamGame.AppId.ToString()),
                 iconPath: GetIconPath(steamGame),
                 platform: PlatformName,
-                iconDelegate: null
+                iconDelegate: null,
+                uninstallAction: new(GetSteamDeleteTask(steamGame.AppId.ToString()))
                 );
         }
 
@@ -55,6 +56,26 @@ namespace GamesLauncher.Platforms.SyncEngines.Steam
                 publicApi.OpenAppUri(new Uri(uriString));
 
                 return ValueTask.FromResult(true);
+            };
+        }
+
+        private Func<Task> GetSteamDeleteTask(string gameAppIdString)
+        {
+            return async () =>
+            {
+                publicApi.OpenAppUri(new Uri($"steam://uninstall/{gameAppIdString}"));
+
+                for (int i = 0; i < 12; i++)
+                {
+                    var installedGames = handler.FindAllGames().Where(x => x.IsGame()).Select(x => x.AsGame());
+
+                    if (installedGames.Any(x => x.AppId.ToString() == gameAppIdString) == false)
+                        break;
+
+                    await Task.Delay(TimeSpan.FromSeconds(5));
+                }
+
+                await SynchronizeGames();
             };
         }
 
