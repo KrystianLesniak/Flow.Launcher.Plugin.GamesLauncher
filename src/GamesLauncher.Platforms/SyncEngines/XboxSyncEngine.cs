@@ -2,6 +2,7 @@
 using GameFinder.Common;
 using GameFinder.StoreHandlers.Xbox;
 using Microsoft.WindowsAPICodePack.Shell;
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using NexusMods.Paths;
 using static Flow.Launcher.Plugin.Result;
 
@@ -59,7 +60,8 @@ namespace GamesLauncher.Platforms.SyncEngines
                 platform: PlatformName,
                 runTask: GetGameRunTask(cmd),
                 iconPath: iconDelegate is null ? Path.Combine("Icons", "xbox.png") : null,
-                iconDelegate: iconDelegate
+                iconDelegate: iconDelegate,
+                uninstallAction: GetXboxUninstallActionTask(shellGame)
                 );
         }
 
@@ -71,6 +73,31 @@ namespace GamesLauncher.Platforms.SyncEngines
 
                 return ValueTask.FromResult(true);
             };
+        }
+
+        private UninstallAction? GetXboxUninstallActionTask(ShellObject shellGame)
+        {
+            var parsingName = shellGame.ParsingName;
+
+            if (shellGame.Properties.GetProperty("System.AppUserModel.PackageFullName").ValueAsObject is not string packageFullname)
+                return null;
+
+            return new UninstallAction(async () =>
+            {
+                publicApi.ShellRun($"Remove-AppxPackage -Package {packageFullname}", "powershell.exe");
+
+                for (int i = 0; i < 12; i++)
+                {
+                    IKnownFolder appsFolder = KnownFolderHelper.FromKnownFolderId(FODLERID_AppsFolder);
+
+                    if (appsFolder.Any(x => x.ParsingName == parsingName) == false)
+                        break;
+
+                    await Task.Delay(TimeSpan.FromSeconds(5));
+                }
+
+                await SynchronizeGames();
+            });
         }
 
         private static IconDelegate? GetIconDelegate(ShellObject shellGame)
