@@ -3,5 +3,6 @@
 internal interface ISyncEngine
 {
     string PlatformName { get; }
-    IAsyncEnumerable<Game> GetGames();
+    IEnumerable<Game> SynchronizedGames { get; }
+    Task SynchronizeGames();
 }

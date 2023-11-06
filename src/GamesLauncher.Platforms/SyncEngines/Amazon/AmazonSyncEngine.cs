@@ -1,11 +1,14 @@
 ﻿using Flow.Launcher.Plugin;
 using GamesLauncher.Platforms.SyncEngines.Amazon.Readers;
+using System.Collections.Concurrent;
 
 namespace GamesLauncher.Platforms.SyncEngines.Amazon
 {
     internal class AmazonSyncEngine : ISyncEngine
     {
         public string PlatformName => "Amazon Games";
+        public IEnumerable<Game> SynchronizedGames { get; private set; } = Array.Empty<Game>();
+
 
         private readonly IPublicAPI publicApi;
 
@@ -14,21 +17,25 @@ namespace GamesLauncher.Platforms.SyncEngines.Amazon
             this.publicApi = publicApi;
         }
 
-        public async IAsyncEnumerable<Game> GetGames()
+        public async Task SynchronizeGames()
         {
             await using var installInfoReader = new InstallInfoReader();
             await using var productDetailsReader = new ProductDetailsReader();
 
+            var syncedGames = new ConcurrentBag<Game>();
+
             await foreach (var gameInstallInfo in installInfoReader.GetInstalledGamesId())
             {
-                yield return new Game(
-                    Title: gameInstallInfo.Title,
-                    RunTask: GetGameRunTask(gameInstallInfo.Id),
-                    IconPath: await productDetailsReader.GetIconUrlById(gameInstallInfo.Id),
-                    IconDelegate: null,
-                    Platform: PlatformName
-                );
+                syncedGames.Add(new Game(
+                    title: gameInstallInfo.Title,
+                    runTask: GetGameRunTask(gameInstallInfo.Id),
+                    iconPath: await productDetailsReader.GetIconUrlById(gameInstallInfo.Id),
+                    iconDelegate: null,
+                    platform: PlatformName
+                ));
             }
+
+            SynchronizedGames = syncedGames;
         }
 
 
