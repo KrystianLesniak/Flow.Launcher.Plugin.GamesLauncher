@@ -2,7 +2,6 @@
 using GameFinder.Common;
 using GameFinder.StoreHandlers.Xbox;
 using Microsoft.WindowsAPICodePack.Shell;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using NexusMods.Paths;
 using static Flow.Launcher.Plugin.Result;
 
