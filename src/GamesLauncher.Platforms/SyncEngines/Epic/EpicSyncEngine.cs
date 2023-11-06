@@ -9,35 +9,39 @@ namespace GamesLauncher.Platforms.SyncEngines.Epic
 {
     internal class EpicSyncEngine : ISyncEngine
     {
-        private readonly IPublicAPI publicApi;
-
         public string PlatformName => "Epic Games Launcher";
+        public IEnumerable<Game> SynchronizedGames { get; private set; } = Array.Empty<Game>();
+
+        private readonly IPublicAPI publicApi;
 
         public EpicSyncEngine(IPublicAPI publicApi)
         {
             this.publicApi = publicApi;
         }
 
-        public async IAsyncEnumerable<Game> GetGames()
+        public async Task SynchronizeGames()
         {
             var epicGames = await GetEpicGamesFromMetadata();
 
+            var syncedGames = new List<Game>();
+
             foreach (var epicGame in epicGames)
             {
-
-                yield return new Game(
-                    Title: epicGame.DisplayName,
-                    RunTask: PrepareRunTask(epicGame.CatalogNamespace, epicGame.CatalogItemId, epicGame.AppName),
-                    IconPath: PrepareIconPath(epicGame),
-                    Platform: PlatformName,
-                    IconDelegate: null
-                    );
+                syncedGames.Add(new Game(
+                    title: epicGame.DisplayName,
+                    runTask: PrepareRunTask(epicGame.CatalogNamespace, epicGame.CatalogItemId, epicGame.AppName),
+                    iconPath: PrepareIconPath(epicGame),
+                    platform: PlatformName,
+                    iconDelegate: null
+                    ));
             }
+
+            SynchronizedGames = syncedGames;
         }
 
         private static async Task<IEnumerable<EpicGame>> GetEpicGamesFromMetadata()
         {
-            var metadataDir = (string?)Registry.GetValue(EpicGamesConsts.RegKeyPath, EpicGamesConsts.RegKeyValueName, string.Empty);
+            var metadataDir = Registry.GetValue(EpicGamesConsts.RegKeyPath, EpicGamesConsts.RegKeyValueName, string.Empty) as string;
 
             if (string.IsNullOrEmpty(metadataDir))
                 return Array.Empty<EpicGame>();

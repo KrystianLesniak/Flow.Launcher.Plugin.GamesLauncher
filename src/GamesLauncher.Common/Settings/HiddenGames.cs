@@ -10,7 +10,7 @@
                 Platform = "Steam",
                 Title = "Steamworks Common Redistributables"
             }
-        }; 
+        };
 
         public void Hide(string title, string platform, string internalGameId)
         {

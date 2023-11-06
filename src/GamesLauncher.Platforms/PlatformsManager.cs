@@ -4,13 +4,15 @@ using GamesLauncher.Platforms.SyncEngines;
 using GamesLauncher.Platforms.SyncEngines.Amazon;
 using GamesLauncher.Platforms.SyncEngines.Epic;
 using GamesLauncher.Platforms.SyncEngines.Steam;
-using System.Collections.Concurrent;
+using System.Diagnostics;
 
 namespace GamesLauncher.Platforms
 {
     public class PlatformsManager
     {
-        private IEnumerable<Game> Games = Array.Empty<Game>();
+        public IEnumerable<Game> AllSynchronizedGames => Engines.SelectMany(x => x.SynchronizedGames);
+
+        private IEnumerable<ISyncEngine> Engines { get; set; } = Array.Empty<ISyncEngine>();
 
         private readonly IPublicAPI publicApi;
 
@@ -21,18 +23,25 @@ namespace GamesLauncher.Platforms
 
         public async Task SynchronizeGames(MainSettings settings)
         {
-            var engines = InitializeEngines(settings);
-            Games = await SynchronizeLibraries(engines);
-        }
+#if DEBUG
+            var stopwatch = Stopwatch.StartNew();
+#endif
 
-        public IEnumerable<Game> GetSynchronizedGames()
-        {
-            return Games;
+            Engines = InitializeEngines(settings);
+            await Parallel.ForEachAsync(Engines, async (engine, ct) =>
+            {
+                await engine.SynchronizeGames();
+            });
+
+#if DEBUG
+            stopwatch.Stop();
+            publicApi.LogInfo(nameof(PlatformsManager), $"GamesLauncher: Games synchronization time: {stopwatch.Elapsed}");
+#endif
         }
 
         public Game? GetGame(string title, string platform)
         {
-            return Games.FirstOrDefault(x=> x.Title == title && x.Platform == platform);
+            return AllSynchronizedGames.FirstOrDefault(x => x.Title == title && x.Platform == platform);
         }
 
         private IEnumerable<ISyncEngine> InitializeEngines(MainSettings settings)
@@ -54,21 +63,6 @@ namespace GamesLauncher.Platforms
             engines.Add(new ShortcutsSyncEngine(publicApi));
 
             return engines;
-        }
-
-        private static async Task<IEnumerable<Game>> SynchronizeLibraries(IEnumerable<ISyncEngine> engines)
-        {
-            var games = new ConcurrentBag<Game>();
-
-            await Parallel.ForEachAsync(engines, async (engine, ct) =>
-            {
-                await foreach (var game in engine.GetGames())
-                {
-                    games.Add(game);
-                };
-            });
-
-            return games;
         }
     }
 }
