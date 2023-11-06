@@ -41,7 +41,7 @@ namespace GamesLauncher.Platforms.SyncEngines.Epic
 
         private static async Task<IEnumerable<EpicGame>> GetEpicGamesFromMetadata()
         {
-            var metadataDir = (string?)Registry.GetValue(EpicGamesConsts.RegKeyPath, EpicGamesConsts.RegKeyValueName, string.Empty);
+            var metadataDir = Registry.GetValue(EpicGamesConsts.RegKeyPath, EpicGamesConsts.RegKeyValueName, string.Empty) as string;
 
             if (string.IsNullOrEmpty(metadataDir))
                 return Array.Empty<EpicGame>();
