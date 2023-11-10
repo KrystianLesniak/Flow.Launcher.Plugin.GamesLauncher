@@ -2,6 +2,7 @@
 using GamesLauncher.Platforms.SyncEngines.Common.ControlPanelUninstall;
 using GamesLauncher.Platforms.SyncEngines.Common.ControlPanelUninstall.Models;
 using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
+using Microsoft.WindowsAPICodePack.Shell;
 
 namespace GamesLauncher.Platforms.SyncEngines.Ubisoft
 {
@@ -36,8 +37,8 @@ namespace GamesLauncher.Platforms.SyncEngines.Ubisoft
                     title: ubiUninstallProgram.DisplayName,
                     platform: PlatformName,
                     runTask: GetGameRunTask(ubiUninstallProgram),
-                    iconPath: ubiUninstallProgram.DisplayIcon ?? Path.Combine("Icons", "ubisoft.ico")
-                //TODO: Add uninstall action
+                    iconPath: ubiUninstallProgram.DisplayIcon ?? Path.Combine("Icons", "ubisoft.ico"),
+                    uninstallAction: GetUninstallAction(ubiUninstallProgram)
                 ));
             }
 
@@ -54,6 +55,31 @@ namespace GamesLauncher.Platforms.SyncEngines.Ubisoft
                 publicApi.OpenAppUri(new Uri(uriString));
                 await Task.CompletedTask;
             };
+        }
+
+        private UninstallAction? GetUninstallAction(UninstallProgram ubiUninstallProgram)
+        {
+            var uninstallCommand = ubiUninstallProgram.UninstallCommand;
+            var subKeyName = ubiUninstallProgram.SubKeyName;
+
+            if(uninstallCommand == null) return null;
+
+            return new UninstallAction(async () =>
+            {
+                publicApi.ShellRun(uninstallCommand);
+
+                for (int i = 0; i < 12; i++)
+                {
+                    var programs = await ControlPanelUninstall.GetPrograms();
+
+                    if (programs.Any(x => x.SubKeyName.Equals(subKeyName)) == false)
+                        break;
+
+                    await Task.Delay(TimeSpan.FromSeconds(5));
+                }
+
+                await SynchronizeGames();
+            });
         }
     }
 }
