@@ -54,10 +54,11 @@ namespace GamesLauncher.Platforms
             if (settings.SynchronizeSteam)
                 engines.Add(new SteamSyncEngine(publicApi));
 
+            if (settings.SynchronizeUbisoft)
+                engines.Add(new UbisoftSyncEngine(publicApi));
+
             if (settings.SynchronizeAmazon)
                 engines.Add(new AmazonSyncEngine(publicApi));
-
-            engines.Add(new UbisoftSyncEngine(publicApi)); //TODO: Add settings
 
             engines.Add(new ShortcutsSyncEngine(publicApi));
 

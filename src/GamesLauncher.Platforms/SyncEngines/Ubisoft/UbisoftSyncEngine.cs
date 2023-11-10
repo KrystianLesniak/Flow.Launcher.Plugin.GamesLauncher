@@ -36,14 +36,12 @@ namespace GamesLauncher.Platforms.SyncEngines.Ubisoft
                     title: ubiUninstallProgram.DisplayName,
                     platform: PlatformName,
                     runTask: GetGameRunTask(ubiUninstallProgram),
-                    iconPath: ubiUninstallProgram.DisplayIcon
+                    iconPath: ubiUninstallProgram.DisplayIcon ?? Path.Combine("Icons", "ubisoft.ico")
                 //TODO: Add uninstall action
                 ));
             }
 
             SynchronizedGames = syncedGames;
-
-            await Task.CompletedTask;
         }
 
         private Func<Task> GetGameRunTask(UninstallProgram ubiUninstallProgram)

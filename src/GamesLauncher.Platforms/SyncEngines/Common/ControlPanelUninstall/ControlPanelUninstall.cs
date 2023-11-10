@@ -45,7 +45,7 @@ namespace GamesLauncher.Platforms.SyncEngines.Common.ControlPanelUninstall
 
                         programs.Add(new UninstallProgram()
                         {
-                            DisplayIcon = prog.GetValue("DisplayIcon")?.ToString() ?? string.Empty,
+                            DisplayIcon = prog.GetValue("DisplayIcon")?.ToString(),
                             DisplayName = prog.GetValue("DisplayName")?.ToString() ?? string.Empty,
                             SubKeyName = programUninstallSubKeyName
                         });
