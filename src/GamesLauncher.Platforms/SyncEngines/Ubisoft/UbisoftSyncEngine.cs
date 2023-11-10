@@ -2,7 +2,6 @@
 using GamesLauncher.Platforms.SyncEngines.Common.ControlPanelUninstall;
 using GamesLauncher.Platforms.SyncEngines.Common.ControlPanelUninstall.Models;
 using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
-using Microsoft.WindowsAPICodePack.Shell;
 
 namespace GamesLauncher.Platforms.SyncEngines.Ubisoft
 {
@@ -62,7 +61,7 @@ namespace GamesLauncher.Platforms.SyncEngines.Ubisoft
             var uninstallCommand = ubiUninstallProgram.UninstallCommand;
             var subKeyName = ubiUninstallProgram.SubKeyName;
 
-            if(uninstallCommand == null) return null;
+            if (uninstallCommand == null) return null;
 
             return new UninstallAction(async () =>
             {
