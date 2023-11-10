@@ -39,15 +39,15 @@ namespace GamesLauncher.Platforms.SyncEngines.Amazon
         }
 
 
-        private Func<ActionContext, ValueTask<bool>> GetGameRunTask(string gameAppIdString)
+        private Func<Task> GetGameRunTask(string gameAppIdString)
         {
             var uriString = "amazon-games://play/" + gameAppIdString;
 
-            return (context) =>
+            return () =>
             {
                 publicApi.OpenAppUri(new Uri(uriString));
 
-                return ValueTask.FromResult(true);
+                return Task.CompletedTask;
             };
         }
     }

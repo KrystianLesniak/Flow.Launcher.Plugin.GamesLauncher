@@ -39,11 +39,6 @@ namespace GamesLauncher.Platforms
 #endif
         }
 
-        public Game? GetGame(string title, string platform)
-        {
-            return AllSynchronizedGames.FirstOrDefault(x => x.Title == title && x.Platform == platform);
-        }
-
         private IEnumerable<ISyncEngine> InitializeEngines(MainSettings settings)
         {
             var engines = new List<ISyncEngine>();
