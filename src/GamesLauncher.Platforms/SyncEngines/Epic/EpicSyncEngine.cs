@@ -69,15 +69,14 @@ namespace GamesLauncher.Platforms.SyncEngines.Epic
             return epicGames;
         }
 
-        private Func<ActionContext, ValueTask<bool>> PrepareRunTask(string catalogNamespace, string catalogItemId, string appName)
+        private Func<Task> PrepareRunTask(string catalogNamespace, string catalogItemId, string appName)
         {
             var launchUriString = $"com.epicgames.launcher://apps/{catalogNamespace}%3A{catalogItemId}%3A{appName}?action=launch&silent=true";
 
-            return (context) =>
+            return async () =>
             {
                 publicApi.OpenAppUri(new Uri(launchUriString));
-
-                return ValueTask.FromResult(true);
+                await Task.CompletedTask;
             };
         }
 

@@ -1,12 +1,13 @@
 ﻿using Flow.Launcher.Plugin;
-using static Flow.Launcher.Plugin.Result;
 
 namespace GamesLauncher.Platforms
 {
-    public class Game
+    public class Game : Result
     {
+        public new string SubTitle => Platform;
+
         internal Game(string title,
-                       Func<ActionContext, ValueTask<bool>> runTask,
+                       Func<Task> runTask,
                        string? iconPath,
                        IconDelegate? iconDelegate,
                        string platform,
@@ -14,19 +15,15 @@ namespace GamesLauncher.Platforms
         {
             Title = title;
             RunTask = runTask;
-            IconPath = iconPath;
-            IconDelegate = iconDelegate;
+            IcoPath = iconPath;
+            Icon = iconDelegate;
             Platform = platform;
             UninstallAction = uninstallAction;
         }
-
-        public string Title { get; }
-        public Func<ActionContext, ValueTask<bool>> RunTask { get; }
-        public UninstallAction? UninstallAction { get; }
-        public string? IconPath { get; }
-        public IconDelegate? IconDelegate { get; }
-        public string Platform { get; }
         public string InternalGameId => $"{Platform}_{Title}";
+        public Func<Task> RunTask { get; set; }
+        public UninstallAction? UninstallAction { get; }
+        public string Platform { get; }
 
     }
 

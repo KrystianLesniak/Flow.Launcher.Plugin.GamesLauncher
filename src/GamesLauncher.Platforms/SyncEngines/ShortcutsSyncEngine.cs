@@ -43,13 +43,12 @@ namespace GamesLauncher.Platforms.SyncEngines
             SynchronizedGames = syncedGames;
         }
 
-        private Func<ActionContext, ValueTask<bool>> GetGameRunTask(string fullPath)
+        private Func<Task> GetGameRunTask(string fullPath)
         {
-            return (context) =>
+            return async () =>
             {
                 publicApi.ShellRun($"start \"\" \"{fullPath}\"");
-
-                return ValueTask.FromResult(true);
+                await Task.CompletedTask;
             };
         }
 

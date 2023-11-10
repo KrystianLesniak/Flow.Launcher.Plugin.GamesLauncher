@@ -48,18 +48,17 @@ namespace GamesLauncher
             var search = query.Search.Trim();
 
             return Task.FromResult(
-                games.Select(x =>
-                CreateQueryResultFromGame(x, search))
-                .Where(x => x != null).Select(x => x!).ToList());
+            games
+                .Where(x => _hiddenGames.IsHidden(x.InternalGameId) == false)
+                .Select(x => EnrichGameWithQueryAndAction(x, search))
+                .ToList());
         }
 
         public List<Result> LoadContextMenus(Result selectedResult)
         {
             var results = new List<Result>();
 
-            var game = _platformsManager.GetGame(selectedResult.Title, selectedResult.SubTitle);
-
-            if (game is null)
+            if (selectedResult is not Game game)
                 return results;
 
             results.Add(new Result
@@ -98,39 +97,28 @@ namespace GamesLauncher
             return new SettingsView(_settings, _hiddenGames, _publicApi);
         }
 
-        private Result? CreateQueryResultFromGame(Game game, string search)
+        private Result EnrichGameWithQueryAndAction(Game game, string search)
         {
-            if (_hiddenGames.IsHidden(game.InternalGameId))
-                return null;
-
-            var result = new Result
-            {
-                Title = game.Title,
-                AsyncAction = game.RunTask,
-                IcoPath = game.IconPath,
-                Icon = game.IconDelegate,
-                SubTitle = game.Platform
-            };
-
-            result.AsyncAction = (context) =>
+            game.AsyncAction = async (context) =>
             {
                 _lastPlayedGames.AddLaunchedGameToLastPlayed(game.InternalGameId);
-                return game.RunTask.Invoke(context);
+                await game.RunTask.Invoke();
+                return true;
             };
 
             //Get score
             if (string.IsNullOrWhiteSpace(search))   //When there is no search query display 10 last played games
             {
-                result.Score = _lastPlayedGames.GetResultScoreByOrder(game.InternalGameId);
+                game.Score = _lastPlayedGames.GetResultScoreByOrder(game.InternalGameId);
             }
             else
             {
                 var fuzzySearch = _publicApi.FuzzySearch(search, game.Title);
-                result.Score = fuzzySearch.Score;
-                result.TitleHighlightData = fuzzySearch.MatchData;
+                game.Score = fuzzySearch.Score;
+                game.TitleHighlightData = fuzzySearch.MatchData;
             }
 
-            return result;
+            return game;
         }
     }
 }
