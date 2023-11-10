@@ -1,5 +1,6 @@
 ﻿using Flow.Launcher.Plugin;
 using GamesLauncher.Platforms.SyncEngines.Amazon.Readers;
+using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 using System.Collections.Concurrent;
 
 namespace GamesLauncher.Platforms.SyncEngines.Amazon

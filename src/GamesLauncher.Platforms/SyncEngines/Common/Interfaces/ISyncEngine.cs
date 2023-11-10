@@ -1,4 +1,4 @@
-﻿namespace GamesLauncher.Platforms.SyncEngines;
+﻿namespace GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 
 internal interface ISyncEngine
 {

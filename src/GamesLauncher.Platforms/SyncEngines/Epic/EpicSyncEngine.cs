@@ -1,4 +1,5 @@
 ﻿using Flow.Launcher.Plugin;
+using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 using GamesLauncher.Platforms.SyncEngines.Epic.Models;
 using Microsoft.Win32;
 using Newtonsoft.Json;

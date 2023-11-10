@@ -1,5 +1,6 @@
 ﻿using Flow.Launcher.Plugin;
 using GamesLauncher.Common;
+using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 
 namespace GamesLauncher.Platforms.SyncEngines
 {
