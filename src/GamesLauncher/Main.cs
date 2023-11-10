@@ -2,6 +2,7 @@ using Flow.Launcher.Plugin;
 using GamesLauncher.Common.Settings;
 using GamesLauncher.Platforms;
 using GamesLauncher.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -99,7 +100,7 @@ namespace GamesLauncher
 
         private Result EnrichGameWithQueryAndAction(Game game, string search)
         {
-            game.AsyncAction = async (context) =>
+            game.AsyncAction ??= async (context) =>
             {
                 _lastPlayedGames.AddLaunchedGameToLastPlayed(game.InternalGameId);
                 await game.RunTask.Invoke();
@@ -110,6 +111,7 @@ namespace GamesLauncher
             if (string.IsNullOrWhiteSpace(search))   //When there is no search query display 10 last played games
             {
                 game.Score = _lastPlayedGames.GetResultScoreByOrder(game.InternalGameId);
+                game.TitleHighlightData = Array.Empty<int>();
             }
             else
             {
