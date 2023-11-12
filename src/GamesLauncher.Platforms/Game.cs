@@ -7,10 +7,10 @@ namespace GamesLauncher.Platforms
         public new string SubTitle => Platform;
 
         internal Game(string title,
+                       string platform,
                        Func<Task> runTask,
                        string? iconPath,
-                       IconDelegate? iconDelegate,
-                       string platform,
+                       IconDelegate? iconDelegate = null,
                        UninstallAction? uninstallAction = null)
         {
             Title = title;
