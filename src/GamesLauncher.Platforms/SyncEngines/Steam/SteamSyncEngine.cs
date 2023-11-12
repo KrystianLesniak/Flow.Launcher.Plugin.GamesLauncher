@@ -2,6 +2,7 @@
 using GameFinder.Common;
 using GameFinder.RegistryUtils;
 using GameFinder.StoreHandlers.Steam;
+using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 using NexusMods.Paths;
 
 namespace GamesLauncher.Platforms.SyncEngines.Steam
@@ -47,15 +48,14 @@ namespace GamesLauncher.Platforms.SyncEngines.Steam
                 );
         }
 
-        private Func<ActionContext, ValueTask<bool>> GetGameRunTask(string gameAppIdString)
+        private Func<Task> GetGameRunTask(string gameAppIdString)
         {
             var uriString = $"steam://launch/{gameAppIdString}/Dialog";
 
-            return (context) =>
+            return async () =>
             {
                 publicApi.OpenAppUri(new Uri(uriString));
-
-                return ValueTask.FromResult(true);
+                await Task.CompletedTask;
             };
         }
 

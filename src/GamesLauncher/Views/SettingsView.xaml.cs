@@ -30,6 +30,7 @@ namespace GamesLauncher.Views
             SynchronizeSteam.IsChecked = _settings.SynchronizeSteam;
             SyncrhonizeEpic.IsChecked = _settings.SynchronizeEpicGamesStore;
             SynchronizeXbox.IsChecked = _settings.SynchronizeXbox;
+            SynchronizeUbisoft.IsChecked = _settings.SynchronizeUbisoft;
             SynchronizeAmazon.IsChecked = _settings.SynchronizeAmazon;
 
             SynchronizeSteam.Checked += (o, e) =>
@@ -57,6 +58,15 @@ namespace GamesLauncher.Views
             SynchronizeXbox.Unchecked += (o, e) =>
             {
                 _settings.SynchronizeXbox = false;
+            };
+
+            SynchronizeUbisoft.Checked += (o, e) =>
+            {
+                _settings.SynchronizeUbisoft = true;
+            };
+            SynchronizeUbisoft.Unchecked += (o, e) =>
+            {
+                _settings.SynchronizeUbisoft = false;
             };
 
             SynchronizeAmazon.Checked += (o, e) =>

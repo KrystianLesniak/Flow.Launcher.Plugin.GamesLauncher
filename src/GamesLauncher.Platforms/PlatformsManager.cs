@@ -2,8 +2,10 @@
 using GamesLauncher.Common.Settings;
 using GamesLauncher.Platforms.SyncEngines;
 using GamesLauncher.Platforms.SyncEngines.Amazon;
+using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 using GamesLauncher.Platforms.SyncEngines.Epic;
 using GamesLauncher.Platforms.SyncEngines.Steam;
+using GamesLauncher.Platforms.SyncEngines.Ubisoft;
 using System.Diagnostics;
 
 namespace GamesLauncher.Platforms
@@ -39,11 +41,6 @@ namespace GamesLauncher.Platforms
 #endif
         }
 
-        public Game? GetGame(string title, string platform)
-        {
-            return AllSynchronizedGames.FirstOrDefault(x => x.Title == title && x.Platform == platform);
-        }
-
         private IEnumerable<ISyncEngine> InitializeEngines(MainSettings settings)
         {
             var engines = new List<ISyncEngine>();
@@ -56,6 +53,9 @@ namespace GamesLauncher.Platforms
 
             if (settings.SynchronizeSteam)
                 engines.Add(new SteamSyncEngine(publicApi));
+
+            if (settings.SynchronizeUbisoft)
+                engines.Add(new UbisoftSyncEngine(publicApi));
 
             if (settings.SynchronizeAmazon)
                 engines.Add(new AmazonSyncEngine(publicApi));

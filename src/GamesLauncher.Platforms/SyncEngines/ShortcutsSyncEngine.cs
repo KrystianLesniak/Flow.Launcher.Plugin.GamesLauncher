@@ -1,5 +1,6 @@
 ﻿using Flow.Launcher.Plugin;
 using GamesLauncher.Common;
+using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 
 namespace GamesLauncher.Platforms.SyncEngines
 {
@@ -43,13 +44,12 @@ namespace GamesLauncher.Platforms.SyncEngines
             SynchronizedGames = syncedGames;
         }
 
-        private Func<ActionContext, ValueTask<bool>> GetGameRunTask(string fullPath)
+        private Func<Task> GetGameRunTask(string fullPath)
         {
-            return (context) =>
+            return async () =>
             {
                 publicApi.ShellRun($"start \"\" \"{fullPath}\"");
-
-                return ValueTask.FromResult(true);
+                await Task.CompletedTask;
             };
         }
 

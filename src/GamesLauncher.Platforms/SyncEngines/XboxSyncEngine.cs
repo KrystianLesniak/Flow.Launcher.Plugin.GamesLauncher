@@ -1,6 +1,7 @@
 ﻿using Flow.Launcher.Plugin;
 using GameFinder.Common;
 using GameFinder.StoreHandlers.Xbox;
+using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 using Microsoft.WindowsAPICodePack.Shell;
 using NexusMods.Paths;
 using static Flow.Launcher.Plugin.Result;
@@ -64,13 +65,12 @@ namespace GamesLauncher.Platforms.SyncEngines
                 );
         }
 
-        private Func<ActionContext, ValueTask<bool>> GetGameRunTask(string cmd)
+        private Func<Task> GetGameRunTask(string cmd)
         {
-            return (context) =>
+            return async () =>
             {
                 publicApi.ShellRun(cmd, "explorer.exe");
-
-                return ValueTask.FromResult(true);
+                await Task.CompletedTask;
             };
         }
 
