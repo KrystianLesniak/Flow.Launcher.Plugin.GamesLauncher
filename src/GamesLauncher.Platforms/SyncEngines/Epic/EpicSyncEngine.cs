@@ -44,10 +44,11 @@ namespace GamesLauncher.Platforms.SyncEngines.Epic
         {
             var metadataDir = Registry.GetValue(EpicGamesConsts.RegKeyPath, EpicGamesConsts.RegKeyValueName, string.Empty) as string;
 
-            if (string.IsNullOrEmpty(metadataDir))
+            if (string.IsNullOrEmpty(metadataDir) || Directory.Exists(metadataDir) == false)
                 return Array.Empty<EpicGame>();
 
             var epicGames = new List<EpicGame>();
+
 
             foreach (var metadataFile in Directory.EnumerateFiles(metadataDir, "*.item", SearchOption.AllDirectories))
             {
