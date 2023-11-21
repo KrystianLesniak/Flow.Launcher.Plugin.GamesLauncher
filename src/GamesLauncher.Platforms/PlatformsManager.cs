@@ -32,7 +32,17 @@ namespace GamesLauncher.Platforms
             Engines = InitializeEngines(settings);
             await Parallel.ForEachAsync(Engines, async (engine, ct) =>
             {
-                await engine.SynchronizeGames();
+                try
+                {
+                    await engine.SynchronizeGames();
+                }
+                catch(Exception ex)
+                {
+                    //TODO: Think about shortening an overly long error message title
+                    publicApi.ShowMsgError($"GamesLauncher: {engine.PlatformName} failed to synchronize", "Please submit your issue with logs at plugin GitHub page.");
+                    publicApi.LogWarn(engine.GetType().Name, @"If you see this, something bad has happened. Please report your problem using the logs you see below at: https://github.com/KrystianLesniak/Flow.Launcher.Plugin.GamesLauncher/issues");
+                    publicApi.LogException(engine.GetType().Name, ex.Message, ex);
+                }
             });
 
 #if DEBUG
