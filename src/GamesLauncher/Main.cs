@@ -47,11 +47,14 @@ namespace GamesLauncher
             var games = _platformsManager.AllSynchronizedGames;
 
             var search = query.Search.Trim();
+            var isGlobalKeyword = string.IsNullOrEmpty(query.ActionKeyword);
 
             return Task.FromResult(
             games
                 .Where(x => _hiddenGames.IsHidden(x.InternalGameId) == false)
-                .Select(x => EnrichGameWithQueryAndAction(x, search))
+                .Select(EnrichGameWithActions)
+                .Select(x => EnrichGameWithResultScore(x, search, isGlobalKeyword))
+                .Where(x => x is not null).Select(x => x!)
                 .ToList());
         }
 
@@ -98,7 +101,7 @@ namespace GamesLauncher
             return new SettingsView(_settings, _hiddenGames, _publicApi);
         }
 
-        private Result EnrichGameWithQueryAndAction(Game game, string search)
+        private Game EnrichGameWithActions(Game game)
         {
             game.AsyncAction ??= async (context) =>
             {
@@ -107,8 +110,12 @@ namespace GamesLauncher
                 return true;
             };
 
-            //Get score
-            if (string.IsNullOrWhiteSpace(search))   //When there is no search query display 10 last played games
+            return game;
+        }
+
+        private Result? EnrichGameWithResultScore(Game game, string search, bool isGlobalKeyword)
+        {
+            if (!isGlobalKeyword && string.IsNullOrWhiteSpace(search))   //When there is no global keyword set and no search query typed prioritze last played games.
             {
                 game.Score = _lastPlayedGames.GetResultScoreByOrder(game.InternalGameId);
                 game.TitleHighlightData = Array.Empty<int>();
@@ -120,7 +127,10 @@ namespace GamesLauncher
                 game.TitleHighlightData = fuzzySearch.MatchData;
             }
 
-            return game;
+            if (isGlobalKeyword)
+                return game.Score > 0 ? game : null;
+            else
+                return game;
         }
     }
 }

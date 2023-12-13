@@ -48,7 +48,9 @@ namespace GamesLauncher.Platforms.SyncEngines
         {
             return async () =>
             {
-                publicApi.ShellRun($"start \"\" \"{fullPath}\"");
+                var directory = Path.GetDirectoryName(fullPath);
+                var fileShortcut = Path.GetFileName(fullPath);
+                publicApi.ShellRun($"cd /d \"{directory}\" && start \"\" \"{fileShortcut}\"");
                 await Task.CompletedTask;
             };
         }
