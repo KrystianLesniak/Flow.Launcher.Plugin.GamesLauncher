@@ -28,6 +28,9 @@
     <None Update="Icons\amazon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Icons\ea.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Icons\epic.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

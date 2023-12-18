@@ -55,7 +55,7 @@ namespace GamesLauncher.Platforms.SyncEngines.EaApp
                         publicApi.ShellRun($"cd /d \"{directory}\" && start \"\" \"{fileExe}\"");
                         await Task.CompletedTask;
                     },
-                    iconPath: eaUninstallProgram.DisplayIconPath ?? Path.Combine("Icons", "ea.ico"), //TODO: Add icon
+                    iconPath: eaUninstallProgram.DisplayIconPath ?? Path.Combine("Icons", "ea.ico"),
                     uninstallAction: GetUninstallAction(eaUninstallProgram)
                 ));
             }
