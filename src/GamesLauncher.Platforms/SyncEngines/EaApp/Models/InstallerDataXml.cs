@@ -6,19 +6,19 @@ namespace GamesLauncher.Platforms.SyncEngines.EaApp.Models
     public class InstallerDataXml
     {
         [XmlElement("runtime")]
-        public Runtime Runtime { get; set; }
+        public Runtime? Runtime { get; set; }
     }
 
     public class Runtime
     {
         [XmlElement("launcher")]
-        public List<Launcher> Launchers { get; set; }
+        public List<Launcher> Launchers { get; set; } = new List<Launcher>();
     }
 
     public class Launcher
     {
         [XmlElement("filePath")]
-        public string FilePath { get; set; }
+        public string FilePath { get; set; } = string.Empty;
 
         [XmlElement("trial")]
         public bool Trial { get; set; }

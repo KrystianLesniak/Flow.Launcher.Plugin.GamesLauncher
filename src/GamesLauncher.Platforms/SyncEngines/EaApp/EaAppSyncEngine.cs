@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace GamesLauncher.Platforms.SyncEngines.EaApp
 {
-    internal class EaAppSyncEngine : ISyncEngine
+    internal partial class EaAppSyncEngine : ISyncEngine
     {
         public string PlatformName => "EA app";
         public IEnumerable<Game> SynchronizedGames { get; private set; } = Array.Empty<Game>();
@@ -71,11 +71,11 @@ namespace GamesLauncher.Platforms.SyncEngines.EaApp
             if (!xmlSerializer.CanDeserialize(xmlReader)) return null;
             if (xmlSerializer.Deserialize(xmlReader) is not InstallerDataXml installerData) return null;
 
-            var launcherData = installerData.Runtime.Launchers.FirstOrDefault(x => x.Trial == false);
+            var launcherData = installerData.Runtime?.Launchers.FirstOrDefault(x => x.Trial == false);
 
             if (launcherData is null) return null;                //TODO: Test how trials behaves
 
-            var gameExe = Regex.Replace(launcherData.FilePath, @"\[.*?\]", string.Empty);
+            var gameExe = RegistryKeyEaPaths().Replace(launcherData.FilePath, string.Empty);
             var gameExePath = Path.Combine(installLocation, gameExe);
 
             if(!File.Exists(gameExePath)) return null;
@@ -116,5 +116,7 @@ namespace GamesLauncher.Platforms.SyncEngines.EaApp
             });
         }
 
+        [GeneratedRegex("\\[.*?\\]")]
+        private static partial Regex RegistryKeyEaPaths();
     }
 }
