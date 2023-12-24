@@ -3,6 +3,7 @@ using GamesLauncher.Common.Settings;
 using GamesLauncher.Platforms.SyncEngines;
 using GamesLauncher.Platforms.SyncEngines.Amazon;
 using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
+using GamesLauncher.Platforms.SyncEngines.EaApp;
 using GamesLauncher.Platforms.SyncEngines.Epic;
 using GamesLauncher.Platforms.SyncEngines.Steam;
 using GamesLauncher.Platforms.SyncEngines.Ubisoft;
@@ -71,6 +72,7 @@ namespace GamesLauncher.Platforms
                 engines.Add(new AmazonSyncEngine(publicApi));
 
             engines.Add(new ShortcutsSyncEngine(publicApi));
+            engines.Add(new EaAppSyncEngine(publicApi)); //TODO: Add settings
 
             return engines;
         }
