@@ -20,6 +20,7 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <TextBlock
             Grid.Row="0"
@@ -45,20 +46,26 @@
             HorizontalAlignment="Left"
             Content="Xbox" />
         <CheckBox
-            x:Name="SynchronizeUbisoft"
+            x:Name="SynchronizeEaApp"
             Grid.Row="4"
+            Margin="10,5,5,5"
+            HorizontalAlignment="Left"
+            Content="EA app" />
+        <CheckBox
+            x:Name="SynchronizeUbisoft"
+            Grid.Row="5"
             Margin="10,5,5,5"
             HorizontalAlignment="Left"
             Content="Ubisoft Connect" />
         <CheckBox
             x:Name="SynchronizeAmazon"
-            Grid.Row="5"
+            Grid.Row="6"
             Margin="10,5,5,5"
             HorizontalAlignment="Left"
             Content="Amazon Games" />
         <Button
             Click="BtnOpenCustomShortcutsDirectory_Click"
-            Grid.Row="6"
+            Grid.Row="7"
             Margin="10,5,5,5"
             Padding="20,10,20,10"
             HorizontalAlignment="Left"
@@ -69,7 +76,7 @@
         </Button>
         <Button
             Click="BtnShowHiddenGames_Click"
-            Grid.Row="7"
+            Grid.Row="8"
             Margin="10,5,5,5"
             Padding="20,10,20,10"
             HorizontalAlignment="Left"
@@ -78,7 +85,7 @@
         <StackPanel 
             Name="HiddenGamesStackPanel"
             Visibility="Collapsed"
-            Grid.Row="8">
+            Grid.Row="9">
             <ListView
                     Name="HiddenGames"
                     Height="auto"

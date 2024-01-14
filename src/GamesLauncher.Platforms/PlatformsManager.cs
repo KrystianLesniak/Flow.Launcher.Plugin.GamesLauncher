@@ -71,8 +71,10 @@ namespace GamesLauncher.Platforms
             if (settings.SynchronizeAmazon)
                 engines.Add(new AmazonSyncEngine(publicApi));
 
+            if (settings.SynchronizeEaApp)
+                engines.Add(new EaAppSyncEngine(publicApi));
+
             engines.Add(new ShortcutsSyncEngine(publicApi));
-            engines.Add(new EaAppSyncEngine(publicApi)); //TODO: Add settings
 
             return engines;
         }
