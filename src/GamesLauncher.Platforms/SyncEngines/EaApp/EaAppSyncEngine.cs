@@ -25,7 +25,6 @@ namespace GamesLauncher.Platforms.SyncEngines.EaApp
 
         public async Task SynchronizeGames()
         {
-
             var eaAppUninstallPrograms = (await ControlPanelUninstall.GetPrograms())
                 .Where(x => x.UninstallCommand != null && x.UninstallCommand.Contains("EAInstaller") && x.UninstallCommand.Contains("Cleanup.exe"));
 
@@ -40,7 +39,7 @@ namespace GamesLauncher.Platforms.SyncEngines.EaApp
 
                 if (!File.Exists(installerDataXmlPath)) continue;
 
-                var gameExePath = GetGameExePathFromInstallerData(eaUninstallProgram.InstallLocation, installerDataXmlPath) 
+                var gameExePath = GetGameExePathFromInstallerData(eaUninstallProgram.InstallLocation, installerDataXmlPath)
                                   ?? GetGameExePathFromUninstallProgram(eaUninstallProgram);
 
                 if (gameExePath is null) continue;
@@ -78,7 +77,7 @@ namespace GamesLauncher.Platforms.SyncEngines.EaApp
             var gameExe = RegistryKeyEaPaths().Replace(launcherData.FilePath, string.Empty);
             var gameExePath = Path.Combine(installLocation, gameExe);
 
-            if(!File.Exists(gameExePath)) return null;
+            if (!File.Exists(gameExePath)) return null;
 
             return gameExePath;
         }

@@ -37,7 +37,7 @@ namespace GamesLauncher.Platforms
                 {
                     await engine.SynchronizeGames();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     //TODO: Think about shortening an overly long error message title
                     publicApi.ShowMsgError($"GamesLauncher: {engine.PlatformName} failed to synchronize", "Please submit your issue with logs at plugin GitHub page.");
