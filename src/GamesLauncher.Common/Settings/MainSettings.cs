@@ -7,5 +7,6 @@
         public bool SynchronizeXbox { get; set; } = true;
         public bool SynchronizeAmazon { get; set; } = true;
         public bool SynchronizeUbisoft { get; set; } = true;
+        public bool SynchronizeEaApp { get; set; } = true;
     }
 }

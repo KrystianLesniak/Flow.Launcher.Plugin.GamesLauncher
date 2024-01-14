@@ -3,6 +3,7 @@ using GamesLauncher.Common.Settings;
 using GamesLauncher.Platforms.SyncEngines;
 using GamesLauncher.Platforms.SyncEngines.Amazon;
 using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
+using GamesLauncher.Platforms.SyncEngines.EaApp;
 using GamesLauncher.Platforms.SyncEngines.Epic;
 using GamesLauncher.Platforms.SyncEngines.Steam;
 using GamesLauncher.Platforms.SyncEngines.Ubisoft;
@@ -36,7 +37,7 @@ namespace GamesLauncher.Platforms
                 {
                     await engine.SynchronizeGames();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     //TODO: Think about shortening an overly long error message title
                     publicApi.ShowMsgError($"GamesLauncher: {engine.PlatformName} failed to synchronize", "Please submit your issue with logs at plugin GitHub page.");
@@ -69,6 +70,9 @@ namespace GamesLauncher.Platforms
 
             if (settings.SynchronizeAmazon)
                 engines.Add(new AmazonSyncEngine(publicApi));
+
+            if (settings.SynchronizeEaApp)
+                engines.Add(new EaAppSyncEngine(publicApi));
 
             engines.Add(new ShortcutsSyncEngine(publicApi));
 
