@@ -8,5 +8,6 @@
         public bool SynchronizeAmazon { get; set; } = true;
         public bool SynchronizeUbisoft { get; set; } = true;
         public bool SynchronizeEaApp { get; set; } = true;
+        public bool SynchronizeGogGalaxy { get; set; } = true;
     }
 }
