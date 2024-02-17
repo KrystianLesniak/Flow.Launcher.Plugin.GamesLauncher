@@ -16,6 +16,7 @@ GamesLauncher is a plugin for [Flow launcher](https://github.com/Flow-Launcher/F
 * Steam
 * Epic Games Launcher
 * Xbox
+* GOG Galaxy
 * EA app
 * Ubisoft Connect
 * Amazon Games
