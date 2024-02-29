@@ -5,6 +5,7 @@ using GamesLauncher.Platforms.SyncEngines.Amazon;
 using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 using GamesLauncher.Platforms.SyncEngines.EaApp;
 using GamesLauncher.Platforms.SyncEngines.Epic;
+using GamesLauncher.Platforms.SyncEngines.Gog;
 using GamesLauncher.Platforms.SyncEngines.Steam;
 using GamesLauncher.Platforms.SyncEngines.Ubisoft;
 using System.Diagnostics;
@@ -73,6 +74,9 @@ namespace GamesLauncher.Platforms
 
             if (settings.SynchronizeEaApp)
                 engines.Add(new EaAppSyncEngine(publicApi));
+
+            if(settings.SynchronizeGogGalaxy)
+                engines.Add(new GogSyncEngine(publicApi));
 
             engines.Add(new ShortcutsSyncEngine(publicApi));
 
