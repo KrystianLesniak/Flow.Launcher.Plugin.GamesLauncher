@@ -26,9 +26,10 @@ namespace GamesLauncher.Platforms.SyncEngines.Epic.Models
             if (displayName == null || catalogNamespace == null || catalogItemId == null || appName == null)
                 return null;
 
-            var isIncompleteInstall = jObject.Value<bool?>("bIsIncompleteInstall");
+            if (jObject.Value<string?>("MainGameCatalogItemId") != catalogItemId) // If this is an addon/DLC mainGameCatalogItemId and catalogItemId will be different
+                return null;
 
-            if (isIncompleteInstall == true)
+            if (jObject.Value<bool?>("bIsIncompleteInstall") == true) // If game installation is not completed this flag is true
                 return null;
 
             return new EpicGame
