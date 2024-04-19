@@ -15,7 +15,7 @@
             {
                 OrderedGames.Add(internalGameId);
 
-                if (OrderedGames.Count > 10)
+                if (OrderedGames.Count > 100)
                     OrderedGames.RemoveAt(0);
             }
         }
