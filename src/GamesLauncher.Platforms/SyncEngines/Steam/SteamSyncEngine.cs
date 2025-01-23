@@ -82,12 +82,21 @@ namespace GamesLauncher.Platforms.SyncEngines.Steam
         private static string GetIconPath(SteamGame game)
         {
             var appIdString = game.AppId.ToString().Trim();
-            var iconCachePath = Path.Combine(game.SteamPath.ToString(), "appcache", "librarycache", $"{appIdString}_icon.jpg");
+            var iconCachePath = Path.Combine(game.SteamPath.ToString(), "appcache", "librarycache", appIdString);
 
-            if (!File.Exists(iconCachePath))
+            if(!Directory.Exists(iconCachePath))
                 return Path.Combine("Icons", "steam.png");
 
-            return iconCachePath;
+            var files = Directory
+                .GetFiles(iconCachePath, "*.jpg", SearchOption.TopDirectoryOnly)
+                .Where(file => {
+                    string fileName = Path.GetFileName(file);
+                    return !fileName.StartsWith("header", StringComparison.OrdinalIgnoreCase) &&
+                           !fileName.StartsWith("library", StringComparison.OrdinalIgnoreCase) &&
+                           !fileName.StartsWith("logo", StringComparison.OrdinalIgnoreCase);
+                });
+
+            return files.FirstOrDefault() ?? Path.Combine("Icons", "steam.png");
         }
     }
 }
