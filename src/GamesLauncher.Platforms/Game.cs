@@ -1,11 +1,10 @@
 ﻿using Flow.Launcher.Plugin;
+using GamesLauncher.Common.Extensions;
 
 namespace GamesLauncher.Platforms
 {
     public class Game : Result
     {
-        public new string SubTitle => Platform;
-
         internal Game(string title,
                        string platform,
                        Func<Task> runTask,
@@ -14,16 +13,15 @@ namespace GamesLauncher.Platforms
                        UninstallAction? uninstallAction = null)
         {
             Title = title;
+            SubTitle = platform;
             RunTask = runTask;
             IcoPath = iconPath;
             Icon = iconDelegate;
-            Platform = platform;
             UninstallAction = uninstallAction;
         }
-        public string InternalGameId => $"{Platform}_{Title}";
+        public string InternalGameId => this.GetInternalGameId();
         public Func<Task> RunTask { get; set; }
         public UninstallAction? UninstallAction { get; }
-        public string Platform { get; }
 
     }
 
