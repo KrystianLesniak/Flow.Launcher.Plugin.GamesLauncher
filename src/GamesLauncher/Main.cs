@@ -1,4 +1,5 @@
 using Flow.Launcher.Plugin;
+using GamesLauncher.Common.Extensions;
 using GamesLauncher.Common.Settings;
 using GamesLauncher.Platforms;
 using GamesLauncher.Views;
@@ -62,7 +63,9 @@ namespace GamesLauncher
         {
             var results = new List<Result>();
 
-            if (selectedResult is not Game game)
+            var game = _platformsManager.AllSynchronizedGames.FirstOrDefault( x => x.InternalGameId == selectedResult.GetInternalGameId());
+
+            if (game is null)
                 return results;
 
             results.Add(new Result
@@ -73,7 +76,7 @@ namespace GamesLauncher
                 Glyph = new GlyphInfo(FontFamily: "/Resources/#Segoe Fluent Icons", Glyph: "\ued1a"),
                 AsyncAction = (context) =>
                 {
-                    _hiddenGames.Hide(game.Title, game.Platform, game.InternalGameId);
+                    _hiddenGames.Hide(game.Title, game.SubTitle, game.InternalGameId);
                     return ValueTask.FromResult(false);
                 }
             });
