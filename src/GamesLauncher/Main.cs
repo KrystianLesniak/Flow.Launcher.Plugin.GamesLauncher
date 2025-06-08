@@ -77,6 +77,7 @@ namespace GamesLauncher
                 AsyncAction = (context) =>
                 {
                     _hiddenGames.Hide(game.Title, game.SubTitle, game.InternalGameId);
+                    _publicApi.ReQuery(false);
                     return ValueTask.FromResult(false);
                 }
             });
