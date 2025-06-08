@@ -22,14 +22,18 @@ namespace GamesLauncher.Platforms.SyncEngines.Epic.Models
             var appName = jObject.Value<string?>(nameof(AppName));
             var installLocation = jObject.Value<string?>(nameof(InstallLocation));
             var launchExecutable = jObject.Value<string?>(nameof(LaunchExecutable));
+            var manifestLocation = jObject.Value<string?>("ManifestLocation");
 
-            if (displayName == null || catalogNamespace == null || catalogItemId == null || appName == null)
+            if (displayName == null || catalogNamespace == null || catalogItemId == null || appName == null || manifestLocation == null)
                 return null;
 
             if (jObject.Value<string?>("MainGameCatalogItemId") != catalogItemId) // If this is an addon/DLC mainGameCatalogItemId and catalogItemId will be different
                 return null;
 
             if (jObject.Value<bool?>("bIsIncompleteInstall") == true) // If game installation is not completed this flag is true
+                return null;
+
+            if (Directory.Exists(Path.Combine(manifestLocation)) == false) //When no manifest location is present we can assume game has been unisntalled
                 return null;
 
             return new EpicGame
