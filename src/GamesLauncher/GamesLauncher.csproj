@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Flow.Launcher.Plugin" Version="5.0.0" />
+    <PackageReference Include="Flow.Launcher.Plugin" Version="5.3.0" />
   </ItemGroup>
 
   <ItemGroup>
