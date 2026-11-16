@@ -1,5 +1,6 @@
 ﻿using Flow.Launcher.Plugin;
 using GamesLauncher.Common;
+using GamesLauncher.Platforms.SyncEngines.Common;
 using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 
 namespace GamesLauncher.Platforms.SyncEngines
@@ -35,7 +36,8 @@ namespace GamesLauncher.Platforms.SyncEngines
                         platform: PlatformName,
                         uninstallAction: new(
                             GetShortcutDeleteTask(shortcut.FullName),
-                            "Delete Shortcut"
+                            "Delete Shortcut",
+                            $"Permanently delete this shortcut file?\n{shortcut.FullName}"
                             )
                         ));
                 }
@@ -46,12 +48,10 @@ namespace GamesLauncher.Platforms.SyncEngines
 
         private Func<Task> GetGameRunTask(string fullPath)
         {
-            return async () =>
+            return () =>
             {
-                var directory = Path.GetDirectoryName(fullPath);
-                var fileShortcut = Path.GetFileName(fullPath);
-                publicApi.ShellRun($"cd /d \"{directory}\" && start \"\" \"{fileShortcut}\"");
-                await Task.CompletedTask;
+                publicApi.RunFile(fullPath);
+                return Task.CompletedTask;
             };
         }
 

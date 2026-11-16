@@ -18,6 +18,7 @@ namespace GamesLauncher.Platforms
             IcoPath = iconPath;
             Icon = iconDelegate;
             UninstallAction = uninstallAction;
+            ContextData = this;
         }
         public string InternalGameId => this.GetInternalGameId();
         public Func<Task> RunTask { get; set; }
@@ -36,10 +37,13 @@ namespace GamesLauncher.Platforms
             UninstallTask = uninstallTask;
         }
 
-        internal UninstallAction(Func<Task> uninstallTask, string title)
+        public string? ConfirmationMessage { get; }
+
+        internal UninstallAction(Func<Task> uninstallTask, string title, string? confirmationMessage = null)
         {
             Title = title;
             UninstallTask = uninstallTask;
+            ConfirmationMessage = confirmationMessage;
         }
 
     }

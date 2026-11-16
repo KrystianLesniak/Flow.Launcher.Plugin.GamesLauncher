@@ -2,6 +2,7 @@
 using GamesLauncher.Common.Settings;
 using GamesLauncher.Platforms.SyncEngines;
 using GamesLauncher.Platforms.SyncEngines.Amazon;
+using GamesLauncher.Platforms.SyncEngines.BattleNet;
 using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 using GamesLauncher.Platforms.SyncEngines.EaApp;
 using GamesLauncher.Platforms.SyncEngines.Epic;
@@ -31,8 +32,8 @@ namespace GamesLauncher.Platforms
             var stopwatch = Stopwatch.StartNew();
 #endif
 
-            Engines = InitializeEngines(settings);
-            await Parallel.ForEachAsync(Engines, async (engine, ct) =>
+            var engines = InitializeEngines(settings);
+            await Parallel.ForEachAsync(engines, async (engine, ct) =>
             {
                 try
                 {
@@ -46,6 +47,8 @@ namespace GamesLauncher.Platforms
                     publicApi.LogException(engine.GetType().Name, ex.Message, ex);
                 }
             });
+
+            Engines = engines;
 
 #if DEBUG
             stopwatch.Stop();
@@ -77,6 +80,9 @@ namespace GamesLauncher.Platforms
 
             if(settings.SynchronizeGogGalaxy)
                 engines.Add(new GogSyncEngine(publicApi));
+
+            if (settings.SynchronizeBattleNet)
+                engines.Add(new BattleNetSyncEngine(publicApi));
 
             engines.Add(new ShortcutsSyncEngine(publicApi));
 

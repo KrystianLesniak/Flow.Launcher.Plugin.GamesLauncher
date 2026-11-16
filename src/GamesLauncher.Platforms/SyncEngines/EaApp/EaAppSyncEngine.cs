@@ -1,6 +1,7 @@
 ﻿using Flow.Launcher.Plugin;
 using GamesLauncher.Platforms.SyncEngines.Common.ControlPanelUninstall;
 using GamesLauncher.Platforms.SyncEngines.Common.ControlPanelUninstall.Models;
+using GamesLauncher.Platforms.SyncEngines.Common;
 using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 using GamesLauncher.Platforms.SyncEngines.EaApp.Models;
 using System.Text.RegularExpressions;
@@ -28,9 +29,6 @@ namespace GamesLauncher.Platforms.SyncEngines.EaApp
             var eaAppUninstallPrograms = (await ControlPanelUninstall.GetPrograms())
                 .Where(x => x.UninstallCommand != null && x.UninstallCommand.Contains("EAInstaller") && x.UninstallCommand.Contains("Cleanup.exe"));
 
-            if (!eaAppUninstallPrograms.Any())
-                return;
-
             var syncedGames = new List<Game>();
 
             foreach (var eaUninstallProgram in eaAppUninstallPrograms)
@@ -47,12 +45,10 @@ namespace GamesLauncher.Platforms.SyncEngines.EaApp
                 syncedGames.Add(new Game(
                     title: eaUninstallProgram.DisplayName,
                     platform: PlatformName,
-                    runTask: async () =>
+                    runTask: () =>
                     {
-                        var directory = Path.GetDirectoryName(gameExePath);
-                        var fileExe = Path.GetFileName(gameExePath);
-                        publicApi.ShellRun($"cd /d \"{directory}\" && start \"\" \"{fileExe}\"");
-                        await Task.CompletedTask;
+                        publicApi.RunFile(gameExePath);
+                        return Task.CompletedTask;
                     },
                     iconPath: eaUninstallProgram.DisplayIconPath ?? Path.Combine("Icons", "ea.ico"),
                     uninstallAction: GetUninstallAction(eaUninstallProgram)
@@ -101,15 +97,8 @@ namespace GamesLauncher.Platforms.SyncEngines.EaApp
             {
                 publicApi.ShellRun(uninstallCommand);
 
-                for (int i = 0; i < 12; i++)
-                {
-                    var programs = await ControlPanelUninstall.GetPrograms();
-
-                    if (programs.Any(x => x.SubKeyName.Equals(subKeyName)) == false)
-                        break;
-
-                    await Task.Delay(TimeSpan.FromSeconds(5));
-                }
+                await EngineHelpers.WaitUntilGone(async () =>
+                    !(await ControlPanelUninstall.GetPrograms()).Any(x => x.SubKeyName.Equals(subKeyName)));
 
                 await SynchronizeGames();
             });

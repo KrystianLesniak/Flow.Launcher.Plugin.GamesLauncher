@@ -1,6 +1,9 @@
 name: Create a build
 
-on: workflow_dispatch 
+on: workflow_dispatch
+
+permissions:
+  contents: write   # needed to create a tag and a release
 
 jobs:
   build:
@@ -20,3 +23,13 @@ jobs:
         name: GamesLauncher
         path: publish/
         if-no-files-found: error
+    - name: Zip
+      shell: pwsh
+      run: Compress-Archive -Path publish/* -DestinationPath GamesLauncher.zip
+    - name: Create draft release
+      shell: pwsh
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        $version = "v" + (Get-Content src/GamesLauncher/plugin.json | ConvertFrom-Json).Version
+        gh release create $version GamesLauncher.zip --draft --generate-notes --target $env:GITHUB_SHA --title $version

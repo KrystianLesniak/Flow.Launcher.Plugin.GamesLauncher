@@ -1,6 +1,7 @@
 ﻿using Flow.Launcher.Plugin;
 using GamesLauncher.Platforms.SyncEngines.Common.ControlPanelUninstall;
 using GamesLauncher.Platforms.SyncEngines.Common.ControlPanelUninstall.Models;
+using GamesLauncher.Platforms.SyncEngines.Common;
 using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 
 namespace GamesLauncher.Platforms.SyncEngines.Ubisoft
@@ -25,9 +26,6 @@ namespace GamesLauncher.Platforms.SyncEngines.Ubisoft
             var ubiUninstallPrograms = (await ControlPanelUninstall.GetPrograms())
                                 .Where(x => x.SubKeyName.StartsWith(UbisoftConnectUninstallRegistryKeyStart));
 
-            if (!ubiUninstallPrograms.Any())
-                return;
-
             var syncedGames = new List<Game>();
 
             foreach (var ubiUninstallProgram in ubiUninstallPrograms)
@@ -49,10 +47,10 @@ namespace GamesLauncher.Platforms.SyncEngines.Ubisoft
             var gameId = ubiUninstallProgram.SubKeyName.Replace(UbisoftConnectUninstallRegistryKeyStart, string.Empty).Trim();
             var uriString = $"uplay://launch/{gameId}/0";
 
-            return async () =>
+            return () =>
             {
                 publicApi.OpenAppUri(new Uri(uriString));
-                await Task.CompletedTask;
+                return Task.CompletedTask;
             };
         }
 
@@ -67,15 +65,8 @@ namespace GamesLauncher.Platforms.SyncEngines.Ubisoft
             {
                 publicApi.ShellRun(uninstallCommand);
 
-                for (int i = 0; i < 12; i++)
-                {
-                    var programs = await ControlPanelUninstall.GetPrograms();
-
-                    if (programs.Any(x => x.SubKeyName.Equals(subKeyName)) == false)
-                        break;
-
-                    await Task.Delay(TimeSpan.FromSeconds(5));
-                }
+                await EngineHelpers.WaitUntilGone(async () =>
+                    !(await ControlPanelUninstall.GetPrograms()).Any(x => x.SubKeyName.Equals(subKeyName)));
 
                 await SynchronizeGames();
             });

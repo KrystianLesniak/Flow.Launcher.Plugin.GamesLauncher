@@ -1,6 +1,7 @@
 ﻿using Flow.Launcher.Plugin;
 using GameFinder.Common;
 using GameFinder.StoreHandlers.Xbox;
+using GamesLauncher.Platforms.SyncEngines.Common;
 using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 using Microsoft.WindowsAPICodePack.Shell;
 using NexusMods.Paths;
@@ -25,18 +26,14 @@ namespace GamesLauncher.Platforms.SyncEngines
 
         public async Task SynchronizeGames()
         {
-            var games = handler.FindAllGames().Where(x => x.IsGame()).Select(x => x.AsGame());
-
-            if (!games.Any())
-                return;
-
+            var games = handler.FindAllGames().Where(x => x.IsGame()).Select(x => x.AsGame()).ToList();
             var syncedGames = new List<Game>();
 
-            IKnownFolder appsFolder = KnownFolderHelper.FromKnownFolderId(FODLERID_AppsFolder);
+            List<ShellObject> apps = games.Count == 0 ? [] : KnownFolderHelper.FromKnownFolderId(FODLERID_AppsFolder).ToList();
 
             foreach (var game in games)
             {
-                var shellGame = appsFolder.FirstOrDefault(x => x.ParsingName.StartsWith(game.Id.Value));
+                var shellGame = apps.FirstOrDefault(x => x.ParsingName.StartsWith(game.Id.Value + "_") || x.ParsingName.StartsWith(game.Id.Value + "!"));
 
                 if (shellGame != null)
                 {
@@ -67,10 +64,10 @@ namespace GamesLauncher.Platforms.SyncEngines
 
         private Func<Task> GetGameRunTask(string cmd)
         {
-            return async () =>
+            return () =>
             {
                 publicApi.ShellRun(cmd, "explorer.exe");
-                await Task.CompletedTask;
+                return Task.CompletedTask;
             };
         }
 
@@ -85,18 +82,13 @@ namespace GamesLauncher.Platforms.SyncEngines
             {
                 publicApi.ShellRun($"Remove-AppxPackage -Package {packageFullname}", "powershell.exe");
 
-                for (int i = 0; i < 12; i++)
-                {
-                    IKnownFolder appsFolder = KnownFolderHelper.FromKnownFolderId(FODLERID_AppsFolder);
-
-                    if (appsFolder.Any(x => x.ParsingName == parsingName) == false)
-                        break;
-
-                    await Task.Delay(TimeSpan.FromSeconds(5));
-                }
+                await EngineHelpers.WaitUntilGone(() =>
+                    Task.FromResult(!KnownFolderHelper.FromKnownFolderId(FODLERID_AppsFolder).Any(x => x.ParsingName == parsingName)));
 
                 await SynchronizeGames();
-            });
+            },
+            "Uninstall",
+            "Remove this Xbox game from your PC? Its files will be deleted.");
         }
 
         private static IconDelegate? GetIconDelegate(ShellObject shellGame)

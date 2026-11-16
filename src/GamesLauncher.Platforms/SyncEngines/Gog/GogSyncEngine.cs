@@ -2,6 +2,7 @@
 using GameFinder.Common;
 using GameFinder.RegistryUtils;
 using GameFinder.StoreHandlers.GOG;
+using GamesLauncher.Platforms.SyncEngines.Common;
 using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 using NexusMods.Paths;
 
@@ -54,10 +55,10 @@ namespace GamesLauncher.Platforms.SyncEngines.Gog
         {
             var argString = $"/command=runGame /gameId={gogGame.Id} /path=\"{gogGame.Path}\"";
 
-            return async () =>
+            return () =>
             {
                 publicApi.ShellRun(argString, gogClient.ExePath);
-                await Task.CompletedTask;
+                return Task.CompletedTask;
             };
         }
         private static string GetIconPath(GOGGame gogGame, GogGalaxyClient gogClient)
@@ -79,19 +80,10 @@ namespace GamesLauncher.Platforms.SyncEngines.Gog
 
             return new UninstallAction(async () =>
             {
-                var directory = Path.GetDirectoryName(uninstallExe);
-                var uninstallFileExe = Path.GetFileName(uninstallExe);
-                publicApi.ShellRun($"cd /d \"{directory}\" && start \"\" \"{uninstallFileExe}\"");
+                publicApi.RunFile(uninstallExe);
 
-                for (int i = 0; i < 12; i++)
-                {
-                    var game = handler.FindAllGames().Where(x => x.IsGame()).Select(x => x.AsGame()).FirstOrDefault(x=> x.Id == gogGame.Id);
-
-                    if (game is null)
-                        break;
-
-                    await Task.Delay(TimeSpan.FromSeconds(5));
-                }
+                await EngineHelpers.WaitUntilGone(() =>
+                    Task.FromResult(!handler.FindAllGames().Where(x => x.IsGame()).Select(x => x.AsGame()).Any(x => x.Id == gogGame.Id)));
 
                 await SynchronizeGames();
             });

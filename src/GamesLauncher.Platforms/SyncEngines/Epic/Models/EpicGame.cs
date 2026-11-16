@@ -27,7 +27,9 @@ namespace GamesLauncher.Platforms.SyncEngines.Epic.Models
             if (displayName == null || catalogNamespace == null || catalogItemId == null || appName == null || manifestLocation == null)
                 return null;
 
-            if (jObject.Value<string?>("MainGameCatalogItemId") != catalogItemId) // If this is an addon/DLC mainGameCatalogItemId and catalogItemId will be different
+            // Addon/DLC has MainGameCatalogItemId pointing at the base game; some base games (e.g. Dying Light) leave it empty
+            var mainGameCatalogItemId = jObject.Value<string?>("MainGameCatalogItemId");
+            if (!string.IsNullOrEmpty(mainGameCatalogItemId) && mainGameCatalogItemId != catalogItemId)
                 return null;
 
             if (jObject.Value<bool?>("bIsIncompleteInstall") == true) // If game installation is not completed this flag is true
