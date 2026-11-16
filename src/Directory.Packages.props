@@ -8,7 +8,7 @@
     <PackageVersion Include="GameFinder.StoreHandlers.Steam" Version="4.9.0" />
     <PackageVersion Include="GameFinder.StoreHandlers.Xbox" Version="4.9.0" />
     <PackageVersion Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
-    <PackageVersion Include="Microsoft.Data.Sqlite" Version="9.0.23" />
+    <PackageVersion Include="Microsoft.Data.Sqlite" Version="10.0.15" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 </Project>
