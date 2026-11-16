@@ -1,12 +1,13 @@
 {
-    "ID": "54545DC7B3A542DBB6C7DA50DEAD455B",
-    "ActionKeyword": "gl",
-    "Name": "GamesLauncher",
-    "Description": "Search and launch games from multiple platforms like Steam, Epic Games, Xbox etc.",
-    "Author": "KrystianLesniak",
-    "Version": "1.9.3",
-    "Language": "csharp",
-    "Website": "https://github.com/KrystianLesniak/Flow.Launcher.Plugin.GamesLauncher",
-    "IcoPath": "icon.png",
-    "ExecuteFileName": "GamesLauncher.dll"
+  "$schema": "https://www.flowlauncher.com/schemas/plugin.schema.json",
+  "ID": "54545DC7B3A542DBB6C7DA50DEAD455B",
+  "ActionKeyword": "gl",
+  "Name": "GamesLauncher",
+  "Description": "Search and launch games from multiple platforms like Steam, Epic Games, Xbox etc.",
+  "Author": "KrystianLesniak",
+  "Version": "1.9.3",
+  "Language": "csharp",
+  "Website": "https://github.com/KrystianLesniak/Flow.Launcher.Plugin.GamesLauncher",
+  "IcoPath": "icon.png",
+  "ExecuteFileName": "GamesLauncher.dll"
 }
