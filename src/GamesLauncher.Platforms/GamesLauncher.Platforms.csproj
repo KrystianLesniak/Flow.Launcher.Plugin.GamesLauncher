@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -17,12 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GameFinder.StoreHandlers.GOG" Version="4.9.0" />
-    <PackageReference Include="GameFinder.StoreHandlers.Steam" Version="4.9.0" />
-    <PackageReference Include="GameFinder.StoreHandlers.Xbox" Version="4.9.0" />
-	<PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
-	<PackageReference Include="Microsoft.Data.Sqlite" Version="9.0.9" />
-	<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="GameFinder.StoreHandlers.GOG" />
+    <PackageReference Include="GameFinder.StoreHandlers.Steam" />
+    <PackageReference Include="GameFinder.StoreHandlers.Xbox" />
+	<PackageReference Include="Microsoft-WindowsAPICodePack-Shell" />
+	<PackageReference Include="Microsoft.Data.Sqlite" />
+	<PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 
   <ItemGroup>
