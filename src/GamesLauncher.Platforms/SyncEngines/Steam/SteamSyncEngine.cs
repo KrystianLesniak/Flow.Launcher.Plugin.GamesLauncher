@@ -53,10 +53,10 @@ namespace GamesLauncher.Platforms.SyncEngines.Steam
         {
             var uriString = $"steam://launch/{gameAppIdString}/Dialog";
 
-            return async () =>
+            return () =>
             {
                 publicApi.OpenAppUri(new Uri(uriString));
-                await Task.CompletedTask;
+                return Task.CompletedTask;
             };
         }
 

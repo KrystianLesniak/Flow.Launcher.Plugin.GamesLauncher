@@ -1,7 +1,6 @@
 ﻿using Flow.Launcher.Plugin;
 using GamesLauncher.Platforms.SyncEngines.Amazon.Readers;
 using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
-using System.Collections.Concurrent;
 
 namespace GamesLauncher.Platforms.SyncEngines.Amazon
 {
@@ -23,7 +22,7 @@ namespace GamesLauncher.Platforms.SyncEngines.Amazon
             await using var installInfoReader = new InstallInfoReader();
             await using var productDetailsReader = new ProductDetailsReader();
 
-            var syncedGames = new ConcurrentBag<Game>();
+            var syncedGames = new List<Game>();
 
             await foreach (var gameInstallInfo in installInfoReader.GetInstalledGamesId())
             {

@@ -64,10 +64,10 @@ namespace GamesLauncher.Platforms.SyncEngines
 
         private Func<Task> GetGameRunTask(string cmd)
         {
-            return async () =>
+            return () =>
             {
                 publicApi.ShellRun(cmd, "explorer.exe");
-                await Task.CompletedTask;
+                return Task.CompletedTask;
             };
         }
 

@@ -47,10 +47,10 @@ namespace GamesLauncher.Platforms.SyncEngines.Ubisoft
             var gameId = ubiUninstallProgram.SubKeyName.Replace(UbisoftConnectUninstallRegistryKeyStart, string.Empty).Trim();
             var uriString = $"uplay://launch/{gameId}/0";
 
-            return async () =>
+            return () =>
             {
                 publicApi.OpenAppUri(new Uri(uriString));
-                await Task.CompletedTask;
+                return Task.CompletedTask;
             };
         }
 

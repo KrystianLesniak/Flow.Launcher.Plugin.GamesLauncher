@@ -75,10 +75,10 @@ namespace GamesLauncher.Platforms.SyncEngines.Epic
         {
             var launchUriString = $"com.epicgames.launcher://apps/{catalogNamespace}%3A{catalogItemId}%3A{appName}?action=launch&silent=true";
 
-            return async () =>
+            return () =>
             {
                 publicApi.OpenAppUri(new Uri(launchUriString));
-                await Task.CompletedTask;
+                return Task.CompletedTask;
             };
         }
 

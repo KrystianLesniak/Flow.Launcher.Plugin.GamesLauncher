@@ -55,10 +55,10 @@ namespace GamesLauncher.Platforms.SyncEngines.Gog
         {
             var argString = $"/command=runGame /gameId={gogGame.Id} /path=\"{gogGame.Path}\"";
 
-            return async () =>
+            return () =>
             {
                 publicApi.ShellRun(argString, gogClient.ExePath);
-                await Task.CompletedTask;
+                return Task.CompletedTask;
             };
         }
         private static string GetIconPath(GOGGame gogGame, GogGalaxyClient gogClient)

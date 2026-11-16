@@ -83,10 +83,10 @@ namespace GamesLauncher.Platforms.SyncEngines.BattleNet
         {
             var uri = new Uri($"battlenet://game/{product.ProductCode}");
 
-            return async () =>
+            return () =>
             {
                 publicApi.OpenAppUri(uri);
-                await Task.CompletedTask;
+                return Task.CompletedTask;
             };
         }
 
