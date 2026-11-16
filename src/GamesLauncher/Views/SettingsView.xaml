@@ -6,7 +6,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="300"
     d:DesignWidth="300"
-    Loaded="SettingsView_OnLoaded"
     DataContext="{Binding RelativeSource={RelativeSource Self}}"
     mc:Ignorable="d">
     <Grid Margin="60,10,10,20" VerticalAlignment="Top">
@@ -30,49 +29,49 @@
             HorizontalAlignment="Left"
             Text="Synchronize:" />
         <CheckBox
-            x:Name="SynchronizeSteam"
+            IsChecked="{Binding Settings.SynchronizeSteam}"
             Grid.Row="1"
             Margin="10,5,5,5"
             HorizontalAlignment="Left"
             Content="Steam" />
         <CheckBox
-            x:Name="SyncrhonizeEpic"
+            IsChecked="{Binding Settings.SynchronizeEpicGamesStore}"
             Grid.Row="2"
             Margin="10,5,5,5"
             HorizontalAlignment="Left"
             Content="Epic Games Launcher" />
         <CheckBox
-            x:Name="SynchronizeXbox"
+            IsChecked="{Binding Settings.SynchronizeXbox}"
             Grid.Row="3"
             Margin="10,5,5,5"
             HorizontalAlignment="Left"
             Content="Xbox" />
         <CheckBox
-            x:Name="SynchronizeGogGalaxy"
+            IsChecked="{Binding Settings.SynchronizeGogGalaxy}"
             Grid.Row="4"
             Margin="10,5,5,5"
             HorizontalAlignment="Left"
             Content="GOG Galaxy" />
         <CheckBox
-            x:Name="SynchronizeEaApp"
+            IsChecked="{Binding Settings.SynchronizeEaApp}"
             Grid.Row="5"
             Margin="10,5,5,5"
             HorizontalAlignment="Left"
             Content="EA app" />
         <CheckBox
-            x:Name="SynchronizeUbisoft"
+            IsChecked="{Binding Settings.SynchronizeUbisoft}"
             Grid.Row="6"
             Margin="10,5,5,5"
             HorizontalAlignment="Left"
             Content="Ubisoft Connect" />
         <CheckBox
-            x:Name="SynchronizeAmazon"
+            IsChecked="{Binding Settings.SynchronizeAmazon}"
             Grid.Row="7"
             Margin="10,5,5,5"
             HorizontalAlignment="Left"
             Content="Amazon Games" />
         <CheckBox
-            x:Name="SynchronizeBattleNet"
+            IsChecked="{Binding Settings.SynchronizeBattleNet}"
             Grid.Row="8"
             Margin="10,5,5,5"
             HorizontalAlignment="Left"
@@ -106,7 +105,7 @@
                     Margin="10"
                     BorderBrush="DarkGray"
                     BorderThickness="1"
-                    ItemsSource="{Binding _hiddenGames.Items}" VerticalAlignment="Center">
+                    VerticalAlignment="Center">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Title">
