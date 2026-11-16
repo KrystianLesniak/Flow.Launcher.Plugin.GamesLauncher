@@ -1,6 +1,7 @@
 using Flow.Launcher.Plugin;
 using GamesLauncher.Platforms.SyncEngines.Common.ControlPanelUninstall;
 using GamesLauncher.Platforms.SyncEngines.Common.ControlPanelUninstall.Models;
+using GamesLauncher.Platforms.SyncEngines.Common;
 using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 
 namespace GamesLauncher.Platforms.SyncEngines.BattleNet
@@ -99,15 +100,8 @@ namespace GamesLauncher.Platforms.SyncEngines.BattleNet
             {
                 publicApi.ShellRun(uninstallCommand);
 
-                for (int i = 0; i < 12; i++)
-                {
-                    var programs = await ControlPanelUninstall.GetPrograms();
-
-                    if (FindUninstallProgram(programs, uid) is null)
-                        break;
-
-                    await Task.Delay(TimeSpan.FromSeconds(5));
-                }
+                await EngineHelpers.WaitUntilGone(async () =>
+                    FindUninstallProgram(await ControlPanelUninstall.GetPrograms(), uid) is null);
 
                 await SynchronizeGames();
             });

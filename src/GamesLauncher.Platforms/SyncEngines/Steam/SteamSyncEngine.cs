@@ -2,6 +2,7 @@
 using GameFinder.Common;
 using GameFinder.RegistryUtils;
 using GameFinder.StoreHandlers.Steam;
+using GamesLauncher.Platforms.SyncEngines.Common;
 using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
 using NexusMods.Paths;
 
@@ -65,15 +66,8 @@ namespace GamesLauncher.Platforms.SyncEngines.Steam
             {
                 publicApi.OpenAppUri(new Uri($"steam://uninstall/{gameAppIdString}"));
 
-                for (int i = 0; i < 12; i++)
-                {
-                    var installedGames = handler.FindAllGames().Where(x => x.IsGame()).Select(x => x.AsGame());
-
-                    if (installedGames.Any(x => x.AppId.ToString() == gameAppIdString) == false)
-                        break;
-
-                    await Task.Delay(TimeSpan.FromSeconds(5));
-                }
+                await EngineHelpers.WaitUntilGone(() =>
+                    Task.FromResult(!handler.FindAllGames().Where(x => x.IsGame()).Select(x => x.AsGame()).Any(x => x.AppId.ToString() == gameAppIdString)));
 
                 await SynchronizeGames();
             };
