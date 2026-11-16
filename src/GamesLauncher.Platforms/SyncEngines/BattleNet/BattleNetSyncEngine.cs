@@ -3,6 +3,7 @@ using GamesLauncher.Platforms.SyncEngines.Common.ControlPanelUninstall;
 using GamesLauncher.Platforms.SyncEngines.Common.ControlPanelUninstall.Models;
 using GamesLauncher.Platforms.SyncEngines.Common;
 using GamesLauncher.Platforms.SyncEngines.Common.Interfaces;
+using System.Diagnostics;
 
 namespace GamesLauncher.Platforms.SyncEngines.BattleNet
 {
@@ -17,22 +18,32 @@ namespace GamesLauncher.Platforms.SyncEngines.BattleNet
         // Battle.net client and its helper components, not games
         private static readonly string[] NonGameProductCodes = ["agent", "bna", "bdko", "bts"];
 
-        // product.db has no display names and not every game gets an uninstall registry entry (e.g. wowf)
-        private static readonly Dictionary<string, string> KnownGameNames = new(StringComparer.OrdinalIgnoreCase)
+        // product.db has no display names (and not every game has an uninstall registry entry, e.g. wowf), and
+        // Battle.net.exe --exec="launch <id>" needs a case-sensitive game family id that differs from the product code
+        private static readonly Dictionary<string, (string Name, string LaunchId)> KnownGames = new(StringComparer.OrdinalIgnoreCase)
         {
-            ["wow"] = "World of Warcraft",
-            ["wow_classic"] = "World of Warcraft Classic",
-            ["wow_classic_era"] = "World of Warcraft Classic Era",
-            ["wowf"] = "World of Warcraft: Forever",
-            ["w3"] = "Warcraft III: Reforged",
-            ["pro"] = "Overwatch 2",
-            ["d3"] = "Diablo III",
-            ["fenris"] = "Diablo IV",
-            ["osi"] = "Diablo II: Resurrected",
-            ["s1"] = "StarCraft: Remastered",
-            ["s2"] = "StarCraft II",
-            ["hs_beta"] = "Hearthstone",
-            ["hero"] = "Heroes of the Storm",
+            ["wow"] = ("World of Warcraft", "WoW"),
+            ["wow_classic"] = ("World of Warcraft Classic", "WoWC"),
+            ["wowf"] = ("World of Warcraft: Forever", "WoWF"),
+            ["w3"] = ("Warcraft III: Reforged", "W3"),
+            ["pro"] = ("Overwatch 2", "Pro"),
+            ["d3"] = ("Diablo III", "D3"),
+            ["d3cn"] = ("Diablo III", "D3CN"),
+            ["fenris"] = ("Diablo IV", "Fen"),
+            ["osi"] = ("Diablo II: Resurrected", "OSI"),
+            ["anbs"] = ("Diablo Immortal", "ANBS"),
+            ["s1"] = ("StarCraft: Remastered", "S1"),
+            ["s2"] = ("StarCraft II", "S2"),
+            ["hs_beta"] = ("Hearthstone", "WTCG"),
+            ["hero"] = ("Heroes of the Storm", "Hero"),
+            ["rtro"] = ("Blizzard Arcade Collection", "RTRO"),
+            ["viper"] = ("Call of Duty: Black Ops 4", "VIPR"),
+            ["odin"] = ("Call of Duty: Modern Warfare", "ODIN"),
+            ["zeus"] = ("Call of Duty: Black Ops Cold War", "ZEUS"),
+            ["fore"] = ("Call of Duty: Vanguard", "FORE"),
+            ["auks"] = ("Call of Duty", "AUKS"),
+            ["lazr"] = ("Call of Duty: Modern Warfare 2 Campaign Remastered", "LAZR"),
+            ["wlby"] = ("Crash Bandicoot 4: It's About Time", "WLBY"),
         };
 
         private readonly IPublicAPI publicApi;
@@ -63,12 +74,12 @@ namespace GamesLauncher.Platforms.SyncEngines.BattleNet
         {
             var title = uninstallProgram?.DisplayName is { Length: > 0 } displayName
                 ? displayName
-                : KnownGameNames.GetValueOrDefault(product.ProductCode) ?? Path.GetFileName(product.InstallPath.TrimEnd('/', '\\'));
+                : (KnownGames.TryGetValue(product.ProductCode, out var known) ? known.Name : null) ?? Path.GetFileName(product.InstallPath.TrimEnd('/', '\\'));
 
             return new Game(
                 title: title,
                 platform: PlatformName,
-                runTask: GetGameRunTask(product),
+                runTask: GetGameRunTask(product, clientExe),
                 iconPath: uninstallProgram?.DisplayIconPath ?? clientExe,
                 uninstallAction: GetUninstallAction(uninstallProgram, product.Uid));
         }
@@ -79,15 +90,51 @@ namespace GamesLauncher.Platforms.SyncEngines.BattleNet
             return programs.FirstOrDefault(x => x.UninstallCommand is not null && (x.UninstallCommand + " ").Contains($"--uid={uid} "));
         }
 
-        private Func<Task> GetGameRunTask(BattleNetProduct product)
+        private Func<Task> GetGameRunTask(BattleNetProduct product, string? clientExe)
         {
-            var uri = new Uri($"battlenet://game/{product.ProductCode}");
+            var launchId = KnownGames.TryGetValue(product.ProductCode, out var known) ? known.LaunchId : null;
 
+            // battlenet://game/<code> only selects the game in the client, --exec="launch <family id>" actually starts it
             return () =>
             {
-                publicApi.OpenAppUri(uri);
+                if (clientExe is null || launchId is null)
+                {
+                    publicApi.OpenAppUri(new Uri($"battlenet://game/{product.ProductCode}"));
+                    return Task.CompletedTask;
+                }
+
+                var args = $"--exec=\"launch {launchId}\"";
+                var clientWasRunning = IsClientRunning(requireWindow: false);
+                publicApi.ShellRun(args, clientExe);
+
+                // A cold-started client only selects the game before it logs in, so repeat the launch once its window is up.
+                // Runs in background so Flow Launcher can close right away.
+                if (!clientWasRunning)
+                    _ = Task.Run(async () =>
+                    {
+                        for (var i = 0; i < 60 && !IsClientRunning(requireWindow: true); i++)
+                            await Task.Delay(TimeSpan.FromSeconds(1));
+
+                        await Task.Delay(TimeSpan.FromSeconds(3));
+                        publicApi.ShellRun(args, clientExe);
+                    });
+
                 return Task.CompletedTask;
             };
+        }
+
+        private static bool IsClientRunning(bool requireWindow)
+        {
+            var processes = Process.GetProcessesByName("Battle.net");
+            try
+            {
+                return processes.Any(x => !requireWindow || x.MainWindowHandle != IntPtr.Zero);
+            }
+            finally
+            {
+                foreach (var process in processes)
+                    process.Dispose();
+            }
         }
 
         private UninstallAction? GetUninstallAction(UninstallProgram? uninstallProgram, string uid)
