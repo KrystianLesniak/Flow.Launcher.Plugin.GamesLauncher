@@ -32,8 +32,8 @@ namespace GamesLauncher.Platforms
             var stopwatch = Stopwatch.StartNew();
 #endif
 
-            Engines = InitializeEngines(settings);
-            await Parallel.ForEachAsync(Engines, async (engine, ct) =>
+            var engines = InitializeEngines(settings);
+            await Parallel.ForEachAsync(engines, async (engine, ct) =>
             {
                 try
                 {
@@ -47,6 +47,8 @@ namespace GamesLauncher.Platforms
                     publicApi.LogException(engine.GetType().Name, ex.Message, ex);
                 }
             });
+
+            Engines = engines;
 
 #if DEBUG
             stopwatch.Stop();
