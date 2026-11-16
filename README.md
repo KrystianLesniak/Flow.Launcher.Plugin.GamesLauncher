@@ -20,6 +20,7 @@ GamesLauncher is a plugin for [Flow launcher](https://github.com/Flow-Launcher/F
 * EA app
 * Ubisoft Connect
 * Amazon Games
+* Battle.net
 * [Custom Shortcuts](#custom-shortcuts)
 
 ## Installation

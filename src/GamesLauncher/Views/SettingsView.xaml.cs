@@ -34,6 +34,7 @@ namespace GamesLauncher.Views
             SynchronizeEaApp.IsChecked = _settings.SynchronizeEaApp;
             SynchronizeUbisoft.IsChecked = _settings.SynchronizeUbisoft;
             SynchronizeAmazon.IsChecked = _settings.SynchronizeAmazon;
+            SynchronizeBattleNet.IsChecked = _settings.SynchronizeBattleNet;
 
             SynchronizeSteam.Checked += (o, e) =>
             {
@@ -96,6 +97,15 @@ namespace GamesLauncher.Views
             SynchronizeAmazon.Unchecked += (o, e) =>
             {
                 _settings.SynchronizeAmazon = false;
+            };
+
+            SynchronizeBattleNet.Checked += (o, e) =>
+            {
+                _settings.SynchronizeBattleNet = true;
+            };
+            SynchronizeBattleNet.Unchecked += (o, e) =>
+            {
+                _settings.SynchronizeBattleNet = false;
             };
         }
 
