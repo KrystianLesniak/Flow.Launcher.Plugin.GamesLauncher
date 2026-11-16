@@ -22,6 +22,7 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <TextBlock
             Grid.Row="0"
@@ -70,9 +71,15 @@
             Margin="10,5,5,5"
             HorizontalAlignment="Left"
             Content="Amazon Games" />
+        <CheckBox
+            x:Name="SynchronizeBattleNet"
+            Grid.Row="8"
+            Margin="10,5,5,5"
+            HorizontalAlignment="Left"
+            Content="Battle.net" />
         <Button
             Click="BtnOpenCustomShortcutsDirectory_Click"
-            Grid.Row="8"
+            Grid.Row="9"
             Margin="10,5,5,5"
             Padding="20,10,20,10"
             HorizontalAlignment="Left"
@@ -83,7 +90,7 @@
         </Button>
         <Button
             Click="BtnShowHiddenGames_Click"
-            Grid.Row="9"
+            Grid.Row="10"
             Margin="10,5,5,5"
             Padding="20,10,20,10"
             HorizontalAlignment="Left"
@@ -92,7 +99,7 @@
         <StackPanel 
             Name="HiddenGamesStackPanel"
             Visibility="Collapsed"
-            Grid.Row="10">
+            Grid.Row="11">
             <ListView
                     Name="HiddenGames"
                     Height="auto"

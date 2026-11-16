@@ -9,5 +9,6 @@
         public bool SynchronizeUbisoft { get; set; } = true;
         public bool SynchronizeEaApp { get; set; } = true;
         public bool SynchronizeGogGalaxy { get; set; } = true;
+        public bool SynchronizeBattleNet { get; set; } = true;
     }
 }
